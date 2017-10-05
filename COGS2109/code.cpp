@@ -102,10 +102,15 @@ bool check(int mid,int n,int m)
 
 int main()
 {
-	int n = gi,m = gi;
+	freopen("transport.in","r",stdin);
+	freopen("transport.out","w",stdout);
+	int n,m;
+	std::cin>>n>>m;
 	for(int i = 1;i<n;i++)
 	{
-		int u = gi-1,v = gi-1,w = gi;
+		int u,v,w;
+		std::cin>>u>>v>>w;
+		u--;v--;
 		Map[u].push_back((Node){v,w});
 		Map[v].push_back((Node){u,w});
 	}
@@ -121,8 +126,8 @@ int main()
 			Up[i][j] = Up[Up[i][j-1]][j-1];
 	for(int i = 0;i<m;i++)
 	{
-		Q[i].st = gi-1;
-		Q[i].ed = gi-1;
+		std::cin>>Q[i].st>>Q[i].ed;
+		Q[i].st--;Q[i].ed--;
 		Q[i].lca = Query(Q[i].st,Q[i].ed);
 		Q[i].len = deep[Q[i].st]+deep[Q[i].ed]-(2*deep[Q[i].lca]);
 	}
