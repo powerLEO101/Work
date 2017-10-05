@@ -1,0 +1,27 @@
+#include<iostream>
+#include<iomanip>
+#include<fstream>
+#include<algorithm>
+
+class node
+{
+public:
+	int a,b,x,y;
+}nodes[10001];
+
+int main()
+{
+	int n,x,y,ans = -1;
+	std::cin>>n;
+	for(int i = 0;i<n;i++)
+		std::cin>>nodes[i].a>>nodes[i].b>>nodes[i].x>>nodes[i].y;
+	std::cin>>x>>y;
+	for(int i = 0;i<n;i++)
+	{
+		int tempx = nodes[i].x + all[i].x;
+		int tempy = nodes[i].y + all[i].y;
+		if(x<=tmpx&&x>=all[i].x&&y<=tmpy&&y>=all[i].y)ans = i;
+	}
+	std::cout<<ans;
+	return 0;
+}
