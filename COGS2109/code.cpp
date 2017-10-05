@@ -102,8 +102,9 @@ bool check(int mid,int n,int m)
 
 int main()
 {
-	freopen("transport.in","r",stdin);
-	freopen("transport.out","w",stdout);
+	//std::ios::sync_with_stdio(false);
+//	freopen("transport.in","r",stdin);
+//	freopen("transport.out","w",stdout);
 	int n,m;
 	std::cin>>n>>m;
 	for(int i = 1;i<n;i++)
@@ -138,6 +139,6 @@ int main()
 		if(check(MID,n,m))r = MID;
 		else l = MID+1;	
 	}
-	std::cout<<l;
+	std::cout<<check(100,n,m);
 	return 0;
 }
