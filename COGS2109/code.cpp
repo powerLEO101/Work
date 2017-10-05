@@ -65,10 +65,11 @@ int Query(int u,int v)
 int Temp[300001],Dist[300001];
 void Dfs(int u)
 {
-	for(std::vector<Node>::iterator it = Map[u].begin();it!=Map[u].end();it++)
+	for(std::vector<Node>::iterator it  = Map[u].begin();it!=Map[u].end();it++)
 	{
-		Dist[it->v] = it->w;
+		if(it->v==Up[u][0])continue;
 		Dfs(it->v);
+		Dist[it->v] = it->w;
 	}
 }
 void Get(int u)
@@ -86,7 +87,7 @@ bool check(int mid,int n,int m)
 	int Max = -INF,Count = 0;
 	for(int i = 0;i<m;i++)
 	{
-		if(Q[i].len<mid)continue;
+		if(Q[i].len<=mid)continue;
 		Temp[Q[i].st]++;Temp[Q[i].ed]++;
 		Temp[Q[i].lca]-=2;
 		Count++;
@@ -108,7 +109,6 @@ int main()
 		Map[u].push_back((Node){v,w});
 		Map[v].push_back((Node){u,w});
 	}
-//	std::cout<<1;
 	for(int i = 0;i<n;i++)
 	{
 		if(Vis[i]==true)continue;
@@ -116,26 +116,22 @@ int main()
 		Build_tree(i);
 		Up[i][0] = i;
 	}
-//	std::cout<<2;
 	for(int j = 1;j<=20;j++)
 		for(int i = 0;i<n;i++)
 			Up[i][j] = Up[Up[i][j-1]][j-1];
-//	std::cout<<3;
 	for(int i = 0;i<m;i++)
 	{
 		Q[i].st = gi-1;
 		Q[i].ed = gi-1;
 		Q[i].lca = Query(Q[i].st,Q[i].ed);
-		Q[i].len = deep[Q[i].st]+deep[Q[i].ed]-(deep[Q[i].lca]);
+		Q[i].len = deep[Q[i].st]+deep[Q[i].ed]-(2*deep[Q[i].lca]);
 	}
-//	std::cout<<4;
 	Dfs(0);
-//	std::cout<<5;
 	int l = 0,r = 1e9;
 	while(l<r)
 	{
 		if(check(MID,n,m))r = MID;
-		else l = MID+1;
+		else l = MID+1;	
 	}
 	std::cout<<l;
 	return 0;
