@@ -81,4 +81,18 @@ https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b
 这里又讲到了一个习惯问题，就是不要在master分支上工作，要在一个feature分支上工作，完成了在合并回去。
 不过这里还讲到了一个语法：
 	git branch -D *** 表示强制删除一个分支（如果不用这个删除未合并的分支会出错）
+*管理标签
+标签git用来区分版本的东西，标签不能修改（因为用来标记版本），标签的代号是自己起名的。
+代码：
+	git tag ***  表示打了一个名字为***的标签，也就是说当前版本为***，
+	git tag 表示查看所有标签
+	git tag -d *** 表示删除***标签
+	git push origin *** 表示讲***标签推送到github
+	git push origin --tags 表示推送所有标签到github
+	
+从github删除标签比较麻烦：
+	先在本地删除标签 git tag -d ***
+	然后在从github删除 git push origin :refs/tags/***
+
+	
 
