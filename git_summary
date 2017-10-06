@@ -93,6 +93,12 @@ https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b
 从github删除标签比较麻烦：
 	先在本地删除标签 git tag -d ***
 	然后在从github删除 git push origin :refs/tags/***
-
-	
-
+*管理远程仓库
+代码：
+	git remote -v 表示查看当前目录下的远程库信息
+	git remote rm *** 表示删除名为***的远程链接，就比如origin
+	git remote add *** git@×××.com:用户名/项目名.git
+	表示与×××创建一个远程连接，名为***
+注意：git的远程代码托管器并不止github一个,还有很多如码云，所以×××填的不一定是github.com
+注意：***是远程连接的名字，这也意味着一个git仓库可以同时连接多个代码托管器。
+注意：在学习了分支后，就可以知道，git push origin ***的***并不只是master，还可以是别的分支。。
