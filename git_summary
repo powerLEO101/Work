@@ -55,5 +55,10 @@ git config --global user.name "你的名字"
 	git branch 表示查看当前的所有分支，当前所在的分支前面会有一个"*"。
 	git branch merge *** 表示将***分支与当前分支合并（可能会有冲突，以后会学）。
 	git branch -d *** 表示删除***分支
-我觉的这里有必要讲一下原理（实在太巧妙了）：
+原理很巧妙，网址：
+https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/001375840038939c291467cc7c747b1810aab2fb8863508000
+10-6日，补充（百度上找的）：
+git checkout .	 #本地所有修改的。没有的提交的，都返回到原来的状态
+git stash	 #把所有没有提交的修改暂存到stash里面。可用git stash pop回复。
+git reset --soft HASH 	#返回到某个节点。保留修改
 
