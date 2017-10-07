@@ -12,7 +12,7 @@
 int get_int()
 {
 	int x = 0,y = 1;char ch = getchar();
-	while((ch<='0'||ch>='9')&&ch!='-')ch = getchar();
+	while((ch<'0'||ch>'9')&&ch!='-')ch = getchar();
 	if(ch=='-')y = -1,ch = getchar();
 	while(ch>='0'&&ch<='9')x = x*10+ch-'0',ch = getchar();
 	return x*y;
@@ -102,16 +102,12 @@ bool check(int mid,int n,int m)
 
 int main()
 {
-	//std::ios::sync_with_stdio(false);
 //	freopen("transport.in","r",stdin);
 //	freopen("transport.out","w",stdout);
-	int n,m;
-	std::cin>>n>>m;
+	int n = gi,m = gi;
 	for(int i = 1;i<n;i++)
 	{
-		int u,v,w;
-		std::cin>>u>>v>>w;
-		u--;v--;
+		int u = gi-1,v = gi-1,w = gi;
 		Map[u].push_back((Node){v,w});
 		Map[v].push_back((Node){u,w});
 	}
@@ -127,8 +123,8 @@ int main()
 			Up[i][j] = Up[Up[i][j-1]][j-1];
 	for(int i = 0;i<m;i++)
 	{
-		std::cin>>Q[i].st>>Q[i].ed;
-		Q[i].st--;Q[i].ed--;
+		Q[i].st = gi-1;
+		Q[i].ed = gi-1;
 		Q[i].lca = Query(Q[i].st,Q[i].ed);
 		Q[i].len = deep[Q[i].st]+deep[Q[i].ed]-(2*deep[Q[i].lca]);
 	}
@@ -139,6 +135,6 @@ int main()
 		if(check(MID,n,m))r = MID;
 		else l = MID+1;	
 	}
-	std::cout<<check(100,n,m);
+	std::cout<<l;
 	return 0;
 }
