@@ -31,7 +31,7 @@ public:
 	int len,lca,st,ed;
 }Q[300001];
 
-int Up[300001][21],Deep[300001],deep[300001];
+int Up[300001][31],Deep[300001],deep[300001];
 bool Vis[300001];
 void Build_tree(int u)
 {
@@ -58,7 +58,7 @@ int Query(int u,int v)
 		if(Up[u][i]!=Up[v][i])
 			u = Up[u][i],
 			v = Up[v][i];
-	if(u!=v)u = Up[u][0],v = Up[u][0];
+	if(u!=v)u = Up[u][0],v = Up[v][0];
 	return u;
 }
 
@@ -87,7 +87,7 @@ bool check(int mid,int n,int m)
 	int Max = -INF,Count = 0;
 	for(int i = 0;i<m;i++)
 	{
-		if(Q[i].len<=mid)continue;
+		if(Q[i].len<=mi)continue;
 		Temp[Q[i].st]++;Temp[Q[i].ed]++;
 		Temp[Q[i].lca]-=2;
 		Count++;
@@ -102,8 +102,8 @@ bool check(int mid,int n,int m)
 
 int main()
 {
-//	freopen("transport.in","r",stdin);
-//	freopen("transport.out","w",stdout);
+	freopen("transport.in","r",stdin);
+	freopen("transport.out","w",stdout);
 	int n = gi,m = gi;
 	for(int i = 1;i<n;i++)
 	{
