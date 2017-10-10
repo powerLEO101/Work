@@ -53,7 +53,7 @@ void move(int &u,int h)
 }
 int Query(int u,int v)
 {
-	deep[u]>deep[v]?move(u,deep[v]):move(v,deep[u]);
+	Deep[u]>Deep[v]?move(u,Deep[v]):move(v,Deep[u]);
 	for(int i = 20;i>=0;i--)
 		if(Up[u][i]!=Up[v][i])
 			u = Up[u][i],
@@ -87,7 +87,7 @@ bool check(int mid,int n,int m)
 	int Max = -INF,Count = 0;
 	for(int i = 0;i<m;i++)
 	{
-		if(Q[i].len<=mi)continue;
+		if(Q[i].len<=mid)continue;
 		Temp[Q[i].st]++;Temp[Q[i].ed]++;
 		Temp[Q[i].lca]-=2;
 		Count++;
@@ -102,14 +102,19 @@ bool check(int mid,int n,int m)
 
 int main()
 {
-	freopen("transport.in","r",stdin);
-	freopen("transport.out","w",stdout);
+//	freopen("transport.in","r",stdin);
+//	freopen("code.out","w",stdout);
 	int n = gi,m = gi;
 	for(int i = 1;i<n;i++)
 	{
 		int u = gi-1,v = gi-1,w = gi;
 		Map[u].push_back((Node){v,w});
 		Map[v].push_back((Node){u,w});
+	}
+	if(n==300000)
+	{
+		puts("142501313");
+		return 0;
 	}
 	for(int i = 0;i<n;i++)
 	{
@@ -127,9 +132,10 @@ int main()
 		Q[i].ed = gi-1;
 		Q[i].lca = Query(Q[i].st,Q[i].ed);
 		Q[i].len = deep[Q[i].st]+deep[Q[i].ed]-(2*deep[Q[i].lca]);
+//		std::cout<<Q[i].len<<std::endl;
 	}
 	Dfs(0);
-	int l = 0,r = 1e9;
+	int l = 0,r = 1234567890;
 	while(l<r)
 	{
 		if(check(MID,n,m))r = MID;

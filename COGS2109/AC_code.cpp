@@ -103,6 +103,8 @@ bool check(int mid)
 }
 int main()
 {
+	freopen("transport.in","r",stdin);
+	freopen("AC_code.out","w",stdout);
 	N=gi();M=gi();
 	for (int i=1;i<N;i++)
 	{
@@ -116,6 +118,7 @@ int main()
 		q[i].s=gi();q[i].t=gi();
 		q[i].lca=LCA(q[i].s,q[i].t);
 		q[i].dis=dep[q[i].s]+dep[q[i].t]-(dep[q[i].lca]<<1);
+//		cout<<q[i].dis<<endl;
 	}
 	int l=0,r=2147483647>>1;
 	while (l<r)
