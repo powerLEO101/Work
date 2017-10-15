@@ -16,16 +16,16 @@ int get_int()
 }
 
 
-int Temp[10001],Len = 0;
+int Temp[1000001],Len = 0;
 std::queue<int> q1,q2,q3;
 
 int Front(std::queue<int>& a){return a.empty()?-INF:a.front()+Len;}
 int Get()
 {
 	int Max = std::max(Front(q1),std::max(Front(q2),Front(q3)));
-	if(Max==q1.front())q1.pop();
-	else if(Max==q2.front())q2.pop();
-	else if(Max==q3.front())q3.pop();
+	if(Max==Front(q1))q1.pop();
+	else if(Max==Front(q2))q2.pop();
+	else if(Max==Front(q3))q3.pop();
 	return Max;
 }
 
