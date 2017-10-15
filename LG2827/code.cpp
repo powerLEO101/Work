@@ -44,14 +44,14 @@ int main()
 		int Temp2 = k-Temp1;
 		q2.push(Temp1-Len-q);
 		q3.push(Temp2-Len-q);
-		if((i+1)%t==0)std::cout<<k<<"$";
+		if((i+1)%t==0)std::cout<<k<<" ";
 		Len+=q;
 	}
 	std::cout<<std::endl;
 	for(int i = 0;i<n+m;i++)
 	{
 		int k = Get();
-		if((i+1)%t==0)std::cout<<k<<"%";
+		if((i+1)%t==0)std::cout<<k<<" ";
 	}
 	return 0;
 }
