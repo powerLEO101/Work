@@ -19,14 +19,14 @@ int get_int()
 class Node
 {
 public:
-	int Val,l,r,Add_Mark;
+	int Val,l,r,Add_mark;
 	Node* l_son,* r_son;
 Node()
 {
 	Val = l = r = Add_mark = 0;
 	l_son = r_son = NULL;
 }
-}* Tree;
+}* Tree = new Node;
 void Build(Node* root)
 {
 	if(root->l==root->r-1){root->Val = gi;return;}
@@ -67,7 +67,13 @@ int Query(Node* root,int l,int r)
 	if(l<=root->l&&r>=root->r)return root->Val;
 	if(r<=root->l||root->r<=l)return 0;
 	Push_down(root);
-	Query(L_SON,l,r);Query(R_SON,l,r);
+	return Query(L_SON,l,r)+Query(R_SON,l,r);
+}
+void Debug(Node* root)
+{
+	std::cout<<root->Val<<std::endl;
+	std::cout<<root->l_son->Val<<" "<<root->r_son->Val<<std::endl;
+	std::cout<<root->l_son->l_son->Val<<" "<<root->l_son->r_son->Val<<" "<<root->r_son->l_son->Val<<" "<<root->r_son->r_son->Val<<std::endl;
 }
 
 int main()
