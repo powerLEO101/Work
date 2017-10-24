@@ -1,42 +1,56 @@
 #include<iostream>
 #include<iomanip>
 #include<fstream>
+#include<cstdio>
 #include<algorithm>
-#include<vector>
-typedef unsigned long long ll;
+#define gi get_int()
+int get_int()
+{
+	int x = 0,y = 1;char ch = ' ';
+	while((ch<'0'||ch>'9')&&ch!='-')ch = getchar();
+	if(ch=='-')y = -1,ch = getchar();
+	while(ch<='9'&&ch>="0")x = x*10+ch-'0',ch = getchar();
+	return x*y;
+}
 
-class BigInteger
+class Int
 {
 public:
-	int BASE = 100000000;
-	int WIDTH = 8;
-	std::vector<ll> val;
-	BigInteger(ll = 0){*this =;}
-private:
-	void operator= (const int&);
-	void operator= (const BigInteger&);
-	int operator% (const int&)const;
-	bool operator< (const int&)const;
-	bool operator> (const int&)const;
-	bool operator< (const BigInteger&)const;
-	bool operator> (const BigInteger&)const;
-	istream operator>> (istream&,BigInteger&);
-	istream operator>> (ifsrean&,int&);
-	ostream operator<< (ostream&,BigInteger&);
-	ostream operator<< (ostream&,int&);
-	BigInteger operator+ (const BigInteger&)const;
-	BigInteger operator- (const BigInteger&)const;
-	BigInteger operator* (const BigInteger&)const;
-	BigInteger operator^ (const BigInteger&)const;
-	BigInteger operator+ (const int&)const;
-	BigInteger operator- (const int&)const;
-	BigInteger operator* (const int&)const;
-	BigInteger operator/ (const int&)const;
-	BigInteger operator^ (const int&)const;
+	int Val[10001],size;
+	int size()
+	{return size;}
+};
+istream& operator>>(istream& in,Int& a)
+{
+	string Temp;
+	in>>Temp;
+	for(int i = 0;i<Temp.size();i++)
+		a[Temp.size()-i-1] = Temp[i];
+	a.size = Temp.size();
+	return in;
+}
+ostream& operator<<(ostream& out,Int &a)
+{
+	for(int i = a.size()-1;i>=0;i--)
+		out<<a[i];
+	return out;
+}
 	
+Int operator+(Int a,int b)
+{
+	int I = 0;
+	while(b!=0)
+	{
+		a.Val[i]
+	}
+}
+Int operator+(Int a,Int b)
+{
+	for(int i = 0)
 }
 
 int main()
 {
+	
 	return 0;
 }
