@@ -3,52 +3,44 @@
 #include<fstream>
 #include<cstdio>
 #include<algorithm>
-#include<vector>
-class Node
+#define gi get_int()
+int get_int()
 {
-public:
-	int v,w;
-};
-std::vector<Node> Map[30001];
-int w[30001];
-
-int Deep[30001];
-void Dfs(int Now)
-{
-	for(std::vector<Node>::iterator it = Map[Now].begin();it!=Map[Now].end();it++)
-	{
-       	    Deep[it->v] = Deep[Now]+it->w;
-	        Dfs(it->v);
-		std::cout<<"$"<<Now<<" "<<Deep[Now]<<std::endl;
-	}
+	int x = 0,y = 1;char ch = getchar();
+	while((ch<'0'||ch>'9')&&ch!='-')ch = getchar();
+	if(ch=='-')y = -1,ch = getchar();
+	while(ch<='9'&&ch>='0')x = x*10+ch-'0',ch = getchar();
+	return x*y;
 }
 
-int get_ans(int Now,int root,int Dist)
+int w[300001];
+int Dist[300001],Father[300001],Ans[300001];
+
+void Get_ans(int Now,int dist,int t)
 {
-    for(std::vector<Node>::iterator it = Map[Now].begin();it!=Map[Now].end();it++)
-	{
-	    if(Deep[it->v])
-	}
+	if(dist>t)return;
+	Ans[Now]++;
+	if(Now==0)return;
+	Get_ans(Father[Now],dist+Dist[Now],t);
 }
 
-int father[300001];
 int main()
 {
-	int n;
-	std::cin>>n;
-	for(int i = 0;i<n;i++)std::cin>>w[i];
+	freopen("tree.in","r",stdin);
+	freopen("tree.out","w",stdout);
+	int n = gi;
+	for(int i = 0;i<n;i++)w[i] = gi;
 	for(int i = 1;i<n;i++)
 	{
-	    int v,w;
-	    std::cin>>v>>w;
-	    v--;
-	    Map[v].push_back((Node){i,w});
-	    father[i] = v;
+		Father[i] = gi-1;
+		Dist[i] = gi;
 	}
-        Dfs(0);
+	for(int i = 1;i<n;i++)
+	{
+		Ans[i] = -1;
+		Get_ans(i,0,w[i]);
+	}
 	for(int i = 0;i<n;i++)
-	    {
-		
-	    }
+		std::cout<<Ans[i]<<" ";
 	return 0;
 }
