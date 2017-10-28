@@ -17,7 +17,7 @@ int main()
 		for(int j = 1;j<=size&&i*p[j]<=100000000;j++)
 		{
 			isp[i*p[j]] = false;
-			if(i%p[j]==0)break;//这句话用于优化常数，一定不能省
+			if(i%p[j]==0)break;//这句话用于优化常数，一定不能省,cann't delete!!!!!
 		}
 	}
 	int Count = 0;
