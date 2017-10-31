@@ -21,7 +21,7 @@ public:
 bool operator< (const Edge& a,const Edge& b){
 	return a.w<b.w;
 }
-int Father[3002];
+int Father[3002],n,m;
 void Init(){for(int i = 0;i<3002;i++)Father[i] = i;}
 int Get_father(int u){return Father[u]==u?u:Father[u] = Get_father(Father[u]);}
 void Merge(int u,int v){Father[Get_father(u)] = Get_father(v);}
@@ -30,11 +30,12 @@ bool Query(int u,int v){return Get_father(u)==Get_father(v);}
 int Kruskal(int len){
 	std::sort(Edges,Edges+len);
 	Init();
-	int Ans = 0;
+	int Ans = 0,Count = 0;
 	for(int i = 0;i<len;i++){
+		if(Count==n)break;
 		if(Query(Edges[i].u,Edges[i].v)==true)continue;
 		Merge(Edges[i].u,Edges[i].v);
-		Ans+=Edges[i].w;
+		Ans+=Edges[i].w;Count++;
 	}
 	return Ans;
 }
@@ -42,9 +43,9 @@ int Kruskal(int len){
 int main(){
 	freopen("resource.in","r",stdin);
 	freopen("resource.out","w",stdout);
-	int n = gi,m = gi;
+	n = gi;m = gi;
 	for(int i = 0;i<m;i++)
-		Temp[i] = gi,Id[i] = gi;
+		Temp[i] = gi,Id[i] = gi-1;
 	int Index = 0;
 	for(int i = 0;i<n;i++)
 		for(int j = 0;j<n;j++){
