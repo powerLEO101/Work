@@ -21,9 +21,9 @@ class Node
 public:
 	int v,w;
 };
-int Map[101][101];
-int Dis[101];
-bool Vis[101];
+int Map[222][222];
+int Dis[222];
+bool Vis[222];
 
 int Prim(int n)
 {
@@ -60,14 +60,13 @@ int main()
 	while(std::cin>>n)
 	{
 		if(n==0)return 0;
-		memset(Map,0x3f,sizeof(Map));
+		memset(Map,0,sizeof(Map));
 		for(int i = 0;i<n*(n-1)/2;i++)
 		{
 			int u = gi-1,v = gi-1,w = gi;
-			Map[u][v] = Map[v][u] = std::min(w,Map[u][v]);
+			Map[u][v] = Map[v][u] = w;
 		}
 		std::cout<<Prim(n)<<std::endl;
 	}
 	return 0;
 }
-
