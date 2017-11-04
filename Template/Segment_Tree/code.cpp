@@ -7,9 +7,9 @@
 #define L_SON root->l_son
 #define R_SON root->r_son
 #define gi get_int()
-int get_int()
+long long get_int()
 {
-	int x = 0,y = 1;char ch = getchar();
+	long long x = 0,y = 1;char ch = getchar();
 	while((ch<'0'||ch>'9')&&ch!='0')ch = getchar();
 	if(ch=='-')y = -1,ch = getchar();
 	while(ch<='9'&&ch>='0')x = x*10+ch-'0',ch = getchar();
@@ -19,7 +19,7 @@ int get_int()
 class Node
 {
 public:
-	int Val,l,r,Add_mark;
+	long long Val,l,r,Add_mark;
 	Node* l_son,* r_son;
 Node()
 {
@@ -48,7 +48,7 @@ void Push_down(Node* root)
 	R_SON->Add_mark+=root->Add_mark;
 	root->Add_mark = 0;
 }
-void Update(Node* root,int l,int r,int Val)//[)
+void Update(Node* root,long long l,long long r,long long Val)//[)
 {
 	if(l<=root->l&&r>=root->r)
 	{
@@ -62,7 +62,7 @@ void Update(Node* root,int l,int r,int Val)//[)
 	Update(R_SON,l,r,Val);
 	root->Val = L_SON->Val+R_SON->Val;
 }
-int Query(Node* root,int l,int r)
+long long Query(Node* root,long long l,long long r)
 {
 	if(l<=root->l&&r>=root->r)return root->Val;
 	if(r<=root->l||root->r<=l)return 0;
@@ -78,14 +78,22 @@ void Debug(Node* root)
 
 int main()
 {
-	int n = gi,m = gi;
+	long long n = gi,m = gi;
 	Tree->l = 0;Tree->r = n;
 	Build(Tree);
-	for(int i = 0;i<m;i++)
+	for(long long i = 0;i<m;i++)
 	{
-		int Mode = gi;
-		if(Mode==1)Update(Tree,gi-1,gi,gi);
-		if(Mode==2)std::cout<<Query(Tree,gi-1,gi)<<std::endl;
+		long long Mode = gi;
+		if(Mode==1)
+		{
+			int a = gi,b = gi,c = gi;
+			Update(Tree,a-1,b,c);
+		}
+		if(Mode==2)
+		{
+			long long a = gi,b = gi;
+			std::cout<<Query(Tree,a-1,b)<<std::endl;
+		}
 	}
 	return 0;
 }
