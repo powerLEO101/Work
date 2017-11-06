@@ -1,37 +1,24 @@
-#include<iostream>
-#include<iomanip>
-#include<fstream>
-#include<cstdio>
-#include<algorithm>
-#define gi get_int()
-int get_int()
-{
-	int x = 0,y = 1;char ch = getchar();
-	while((ch<'0'||ch>'9')&&ch!='0')ch = getchar();
-	if(ch=='-')y = -1,ch = getchar();
-	while(ch<='9'&&ch>='0')x = x*10+ch-'0',ch = getchar();
-	return x*y;
-}
-
+#include <bits/stdc++.h>
+using namespace std;
 int main()
 {
 	system("g++ code.cpp -o code");
 	system("g++ mice.cpp -o AC_code");
 	system("g++ make.cpp -o make");
 	int T = 0;
-	while(23333333)
+	while(1)
 	{
-		std::cout<<"CASE"<<T++<<"#";
+		cout<<"CASE"<<T++<<"#";
 		system("./make");
 		system("./AC_code");
-		std::cout<<"1";
+		cout<<"1";
 		system("./code");
 		if(system("diff code.out mice.out"))
 		{
-			std::cout<<"WA"<<std::endl;
+			cout<<"WA"<<endl;
 			return 0;
 		}
-		std::cout<<"AC"<<std::endl;
+		cout<<"AC"<<endl;
 	}
 	return 0;
 }
