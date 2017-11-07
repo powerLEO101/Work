@@ -3,6 +3,7 @@
 #include<fstream>
 #include<cstdio>
 #include<algorithm>
+<<<<<<< HEAD
 #define MID (root->l+root->r)/2
 #define L_SON root->l_son
 #define R_SON root->r_son
@@ -105,12 +106,52 @@ long long Query(Node* root,long long l,long long r)
 	if(r<=root->l||root->r<=l)return 0;
 	Push_down(root);
 	return Query(L_SON,l,r)+Query(R_SON,l,r);
+=======
+#define gi get_int()
+#define MID ((root->l+roor->r)/2)
+int get_int()
+{
+	int x = 0 , y = 1;char ch = getchar();
+	while ( ( ch < '0' || ch > '9' ) && ch != '-' ) ch = getchar();
+	if ( ch == '-' ) y = -1,ch = getchar();
+	while ( ch <= '9' && ch >= '0') x = x * 10 + ch - '0',ch = getchar();
+	return x * y;
+}
+
+class Node
+{
+public:
+	int Val,l,r;
+	Node* l_son r_son;
+Node()
+{
+	Val = l = r = 0;
+	l_son = r_son = NULL;
+}* Segment_tree = new Node;
+
+void Build(Node* root)
+{
+	if(root->r==root->l+1)
+	{
+		root->Val = gi;
+		return;
+	}
+	root->l_son = new Node;
+	root->r_son = new Node;
+	root->l_son->l = root->l;
+	root->l_son->r = MID;
+	root->r_son->l = MID;
+	root->r_son->r = root->r;
+	Build(root->l_son);Build(root->r_son);
+	root->Val = root->l_son->Val+root->r_son->Val;
+>>>>>>> 158806688ab14cfdba0bc9e4fe737fc1b0986c02
 }
 
 int main()
 {
 	freopen("code.in","r",stdin);
 	freopen("code.out","w",stdout);
+<<<<<<< HEAD
 	long long n = gi,m = gi;
 	p = gi;
 	Tree->l = 0;Tree->r = n;
@@ -127,6 +168,18 @@ int main()
 		{
 			int a = gi,b = gi,c = gi;
 			Update(Tree,a-1,b,c,Mode);
+=======
+	int n = gi,m = gi,P = gi;
+	Segment_tree->l = 0;
+	Segment_tree->r = n;
+	Build(Segment_tree);
+	for(int i = 0;i<m;i++)
+	{
+		int Mode = gi;
+		if(Mode==1)
+		{
+			
+>>>>>>> 158806688ab14cfdba0bc9e4fe737fc1b0986c02
 		}
 	}
 	return 0;
