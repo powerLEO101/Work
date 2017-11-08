@@ -13,20 +13,21 @@ int get_int()
 	return x*y;
 }
 
-int f[100001],g[100001];
+int f[100001],g[100001],Sum[100001];
 
-int main()//long long!!!
+int main()
 {
 	freopen("xor.in","r",stdin);
 	freopen("xor.out","w",stdout);
 	int n = gi,Ans = 0;
 	for(int i = 0;i<n;i++)f[i] = gi;
 	for(int i = 0;i<n;i++)g[i] = gi;
-	for(int i = 0;i<n;i++)
+	int h = f[0]^g[0];
+	std::cout<<h<<" ";
+	for(int i = 1;i<n;i++)
 	{
-		Ans = f[0]^g[i];
-		for(int j = 1;j<=i;j++)	Ans^=(f[j]^g[i-j]);
-		std::cout<<Ans<<" ";
+		h = h^g[i]^f[i];
+		std::cout<<h<<" ";
 	}
 	return 0;
 }
