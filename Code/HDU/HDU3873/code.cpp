@@ -18,8 +18,8 @@ int get_int()
 
 class Node
 {
-public:
-	int v,w;
+	public:
+		int v,w;
 };
 std::vector<Node> Map[10001];
 std::vector<int> Center[10001];
@@ -32,6 +32,7 @@ void SPFA(int S)
 	inq[S] = true;
 	Q.push(S);
 	Dis[S] = 0;
+	for(int i = 0;i<Center[0].size();i++)Save[Center[0][i]]--;
 	while(!Q.empty())
 	{
 		int u = Q.front();Q.pop();
@@ -73,10 +74,13 @@ int main()
 		{
 			Save[i] = gi;
 			for(int j = 0;j<Save[i];j++)
-				Center[j].push_back(i);
+			{
+				int v = gi-1;
+				Center[v].push_back(i);
+			}
 		}
 		SPFA(0);
-		std::cout<<Dis[n-1]<<std::endl;
+		for(int i = 0;i<n;i++)std::cout<<Dis[i]<<" ";
 	}
 	return 0;
 }

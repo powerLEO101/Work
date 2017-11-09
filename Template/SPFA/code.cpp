@@ -28,7 +28,7 @@ public:
 	int v,w;
 };
 std::vector<Node> Map[10001];
-int Dis[10001],in[10001],n,m,s;
+int Dis[10001],n,m,s;
 bool inq[10001];
 
 void SPFA(int s)
