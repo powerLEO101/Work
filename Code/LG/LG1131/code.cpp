@@ -19,7 +19,7 @@ class Node
 {
 public:
 	int v,w;
-}
+};
 std::vector<Node> Map[500001];
 
 int Dp[500001];
@@ -38,21 +38,32 @@ void Get_ans(int Now)
 		Get_ans(v);
 		Dp[Now]+=Dp[v];
 	}
-	if(Count==0)Dp[Now] = 0;
-	else Sum+=Count*Max;
+	if(Count==0)
+	{
+		std::cout<<Now+1<<std::endl;
+		Dp[Now] = 0;
+	}
+	else
+	{
+		Sum+=Count*Max;
+		std::cout<<Now+1<<" "<<Sum<<std::endl;
+		Dp[Now]+=Sum;
+	}
 }
 
 int main()
 {
 	freopen("code.in","r",stdin);
 	freopen("code.out","w",stdout);
-	int n = gi,m = gi;
+	int n = gi,m = gi-1;
+	Vis[m] = true;
 	for(int i = 1;i<n;i++)
 	{
-		int u = gi,v = gi,w = gi;
+		int u = gi-1,v = gi-1,w = gi;
 		Map[u].push_back((Node){v,w});
 		Map[v].push_back((Node){u,w});
 	}
-	
+	Get_ans(m);
+	for(int i = 0;i<n;i++)std::cout<<Dp[i]<<" ";
 	return 0;
 }
