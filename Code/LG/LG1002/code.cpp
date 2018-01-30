@@ -15,7 +15,7 @@ int get_int()
 	return x*y;
 }
 
-int Map[101][101],f[101][101];
+long long Map[101][101],f[101][101];
 
 void Get(int hx,int hy)
 {
