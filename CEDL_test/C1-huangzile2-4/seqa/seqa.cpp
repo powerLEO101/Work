@@ -16,7 +16,7 @@ int get_int()
 
 long long Num[100001];
 
-bool check(int MID,int n,int k)
+bool check(long long MID,long long n,long long k)
 {
 	long long Ans = Num[0];
 	long long Count = 1;
@@ -33,13 +33,13 @@ int main()
 {
 	freopen("seqa.in","r",stdin);
 	freopen("seqa.out","w",stdout);
-	int n = gi,k = gi;
+	long long n = gi,k = gi;
 	for(int i = 0;i<n;i++)
 		Num[i] = gi;
 	long long l = 0,r = 100000000000000;
 	while(l<r)
 	{
-		int MID = (l+r)/2;
+		long long MID = (l+r)/2;
 		if(check(MID,n,k)==true)r = MID-1;
 		else l = MID+1;
 	}
