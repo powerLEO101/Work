@@ -18,11 +18,12 @@ long long Num[100001];
 
 bool check(long long MID,long long n,long long k)
 {
-	long long Ans = Num[0];
 	long long Count = 1;
+	long long Ans = Num[0];
 	for(int i = 1;i<n;i++)
 	{
-		if(Ans+Num[i]<MID)Ans+=Num[i];
+		if(Num[i]>MID)return false;
+		if(Ans+Num[i]<=MID)Ans+=Num[i];
 		else Ans = Num[i],Count++;
 	}
 	if(Count>k)return false;
@@ -37,7 +38,7 @@ int main()
 	for(int i = 0;i<n;i++)
 		Num[i] = gi;
 	long long l = 0,r = 100000000000000;
-	while(l<r)
+	while(l<=r)
 	{
 		long long MID = (l+r)/2;
 		if(check(MID,n,k)==true)r = MID-1;

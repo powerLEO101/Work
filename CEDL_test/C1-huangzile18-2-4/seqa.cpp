@@ -37,7 +37,7 @@ int main()
 	for(int i = 0;i<n;i++)
 		Num[i] = gi;
 	long long l = 0,r = 100000000000000;
-	while(l<r)
+	while(l<=r)
 	{
 		long long MID = (l+r)/2;
 		if(check(MID,n,k)==true)r = MID-1;
