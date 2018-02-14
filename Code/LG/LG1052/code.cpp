@@ -3,6 +3,7 @@
 #include<fstream>
 #include<cstdio>
 #include<algorithm>
+#include<cstring>
 #define gi get_int()
 #define INF 0x3f3f3f3f
 int get_int()
@@ -14,41 +15,45 @@ int get_int()
 	return x*y;
 }
 
-int Num[1001],Stone[1001],Dp[20000];
+int Num[1001],Stone[500001],Dp[500001];
 
 int main()
 {
 	freopen("code.in","r",stdin);
 	freopen("code.out","w",stdout);
 	int n = gi,S = gi,T = gi,m = gi;
-	for(int i = 0;i<m;i++)
+	for(int i = 1;i<=m;i++)
 		Num[i] = gi;
-	for(int i = 0;i<m-1;i++)
+	if(S==T)
 	{
-		if(Num[i+1]-Num[i]<=100)continue;
-		int Temp = Num[i+1]-(Num[i]+100);
-		for(int j = i+1;j<m;j++)
+		int Ans = 0;
+		for(int i = 1;i<=m;i++)
+			if(Num[i]%S==0)Ans++;
+		std::cout<<Ans;
+		return 0;
+	}
+	std::sort(Num+1,Num+m+1);
+	int MaxVal = S*T;
+	for(int i = 1;i<=m;i++)
+	{
+		if(Num[i]-Num[i-1]<=MaxVal)continue;
+		int Temp = Num[i]-(Num[i-1]+MaxVal);
+		for(int j = i;j<=m;j++)
 			Num[j]-=Temp;
 	}
-	n = Num[m-1];
-	for(int i = 0;i<m;i++)Stone[Num[i]]++;
-	for(int i = 1;i<=n;i++)std::cout<<Stone[i]<<" ";
-	std::cout<<std::endl;
-	for(int i = 1;i<=n+t;i++)
+	n = Num[m]+101;
+	memset(Dp,0x3f,sizeof(Dp));
+	Dp[0] = 0;
+	for(int i = 1;i<=m;i++)Stone[Num[i]] = 1;
+	for(int i = 1;i<=n+T-1;i++)
 	{
-		Dp[i] = INF;
-		if(i-S<=0)
-		{
-			Dp[i] = Stone[i];
-			std::cout<<i<<std::endl;
-		}
-		else
-			for(int j = i-S;j>=i-T&&j>=1;j--)
-				Dp[i] = std::min(Dp[i],Dp[j]+Stone[i]);
+		for(int j = S;j<=T;j++)
+			if(i-j>=0)
+				Dp[i] = std::min(Dp[i],Dp[i-j]+Stone[i]);
 	}
-	for(int i = n;i<=)
-	for(int i = 1;i<=n;i++)std::cout<<Dp[i]<<" ";
-	std::cout<<std::endl;
-	std::cout<<Dp[n];
+	int Ans = INF;
+	for(int i = n;i<=n+T-1;i++)Ans = std::min(Ans,Dp[i]);
+	std::cout<<Ans;
 	return 0;
 }
+
