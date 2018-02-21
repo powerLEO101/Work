@@ -44,8 +44,6 @@ int main()
 		Dp[i][j][0] = Dp[i][j][0]%MOD;
 		Dp[i][j][1] = Dp[i][j][1]%MOD;
 	}
-	for(int i = 0;i<n;i++)
-		std::cout<<Dp[i][0][0]<<" "<<Dp[i][0][1]<<std::endl;
 	int Ans = 0;
 	for(int i = 0;i<n;i++)
 		Ans = (Ans+Dp[i][0][1]+Dp[i][0][0])%MOD;
