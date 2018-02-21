@@ -16,7 +16,7 @@ int get_int()
 	return x*y;
 }
 
-int Num[1001],Dp[100][11][11][11];
+int Num[1001],Dp[101][11][11][11];
 
 int Get_ans(int Now,int x,int y,int z)
 {
@@ -30,7 +30,7 @@ int Get_ans(int Now,int x,int y,int z)
 			if(Num[i]==1)t1++;
 			else if(Num[i]==2)t2++;
 			else if(Num[i]==3)t3++;
-		Ans = std::min(Ans,Get_ans(Now+1,t1,t2,t3));
+		Ans = std::min(Ans,Get_ans(Now+x,t1,t2,t3));
 	}
 	if(y!=0)
 	{
@@ -39,7 +39,7 @@ int Get_ans(int Now,int x,int y,int z)
 			if(Num[i]==1)t1++;
 			else if(Num[i]==2)t2++;
 			else if(Num[i]==3)t3++;
-		Ans = std::min(Ans,Get_ans(Now+1,t1,t2,t3));
+		Ans = std::min(Ans,Get_ans(Now+y,t1,t2,t3));
 	}
 	if(z!=0)
 	{
@@ -48,7 +48,7 @@ int Get_ans(int Now,int x,int y,int z)
 			if(Num[i]==1)t1++;
 			else if(Num[i]==2)t2++;
 			else if(Num[i]==3)t3++;
-		Ans = std::min(Ans,Get_ans(Now+1,t1,t2,t3));
+		Ans = std::min(Ans,Get_ans(Now+z,t1,t2,t3));
 	}
 	return Dp[Now][x][y][z] = ++Ans;
 }
@@ -67,11 +67,11 @@ int main()
 		if(ch=='B')Num[i] = 2;
 		if(ch=='C')Num[i] = 3;
 	}
-	int x = 0,y = 0,z = 0;
-	for(int i = 0;i<10;i++)
+	int x = 0,y = 0,z = 0,i;
+	for(i = 0;i<10&&i<n;i++)
 		if(Num[i]==1)x++;
 		else if(Num[i]==2)y++;
 		else if(Num[i]==3)z++;
-	std::cout<<Get_ans(10,x,y,z);
+	std::cout<<Get_ans(i,x,y,z);
 	return 0;
 }
