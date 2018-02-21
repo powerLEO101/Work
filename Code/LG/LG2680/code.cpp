@@ -102,8 +102,8 @@ bool check(int mid,int n,int m)
 
 int main()
 {
-//	freopen("transport.in","r",stdin);
-//	freopen("code.out","w",stdout);
+	freopen("transport.in","r",stdin);
+	freopen("code.out","w",stdout);
 	int n = gi,m = gi;
 	for(int i = 1;i<n;i++)
 	{
