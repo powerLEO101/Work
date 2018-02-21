@@ -19,17 +19,18 @@ std::vector<int> Map[2002];
 int Dp[2002][2];
 bool Vis[2002];
 
-void Get_ans(int Now)
+void Get_ans(int Now,int Father)
 {
 	if(Vis[Now]==true)return;
 	Vis[Now] = true;
+	Dp[Now][1]++;
 	for(std::vector<int>::iterator it = Map[Now].begin();it!=Map[Now].end();it++)
 	{
-		Get_ans(*it);
+		if(*it==Father)continue;
+		Get_ans(*it,Now);
 		Dp[Now][0]+=Dp[*it][1];
 		Dp[Now][1]+=std::min(Dp[*it][1],Dp[*it][0]);
 	}
-	Dp[Now][1]++;
 }
 
 int main()
@@ -47,7 +48,7 @@ int main()
 			Map[v].push_back(u);
 		}
 	}
-	Get_ans(0);
+	Get_ans(0,-1);
 	std::cout<<std::min(Dp[0][0],Dp[0][1]);
 	return 0;
 }
