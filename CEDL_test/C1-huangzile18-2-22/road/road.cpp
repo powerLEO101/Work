@@ -49,7 +49,6 @@ int main()
 {
 	freopen("road.in","r",stdin);
 	freopen("road.out","w",stdout);
-	int TimeNow = clock();
 	srand(time(0));
 	int n = gi;
 	for(int i = 0;i<n;i++)
@@ -60,7 +59,7 @@ int main()
 		Ans = std::min(Ans,Get_ans(n));
 		for(int i = 0;i<n;i++)
 			Num[i] = Num1[i];
-		if(clock()-TimeNow>=930233)break;
+		if(clock()>=930233)break;
 	}
 	std::cout<<Ans;
 	return 0;

@@ -15,26 +15,16 @@ int get_int()
 	return x*y;
 }
 
-int Num[100001],Dp[2][100001];
+int Num[100001];
 
 int main()
 {
 	freopen("fight.in","r",stdin);
 	freopen("fight.out","w",stdout);
 	int n = gi,X = gi,Y = gi,A = gi,B = gi;
-	for(int i = 0;i<n;i++)
-		Num[i] = gi;
-	int Index = 0;
-	for(int i = 0;i<=2*B;i++)
-		Dp[0][i] = Dp[1][i] = -INF;
-	Dp[0][]
-	for(int i = 1;i<n;i++)
-	{
-		Index^=1;
-		for(int j = 0;j<=2*B;j++)
-		{
-			Dp[i][j] = std::max(Dp[i-1][j],std::max(Dp[i-1][j-x]+));
-		}
-	}
+	int S;
+	if(B%X==0)S = B/X;
+	else S = B/X+1;
+	std::cout<<"Win"<<std::endl<<S;
 	return 0;
 }
