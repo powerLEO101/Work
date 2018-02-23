@@ -27,8 +27,8 @@ void Get_ans(int Now)
 		return;
 	}
 	if(V[Now]==true)return;
-	Vis[Now] = true;
 	V[Now] = true;
+	Vis[Now] = true;
 	for(std::vector<int>::iterator it = Map[Now].begin();it!=Map[Now].end();it++)
 		Get_ans(*it);
 	Vis[Now] = false;
@@ -36,11 +36,10 @@ void Get_ans(int Now)
 
 int main()
 {
-	freopen("snake.in","r",stdin);
-	freopen("snake.out","w",stdout);
 	int T = gi;
 	while(T--)
 	{
+		for(int i = 0;i<=20001;i++)Map[i].clear();
 		int n = gi,m = gi;
 		for(int i = 0;i<m;i++)
 		{
