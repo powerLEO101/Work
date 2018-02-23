@@ -17,6 +17,7 @@ int get_int()
 
 std::vector<int> Map[20001];
 bool Vis[20001],Flag = false;
+bool V[20001];
 
 void Get_ans(int Now)
 {
@@ -26,8 +27,10 @@ void Get_ans(int Now)
 		return;
 	}
 	Vis[Now] = true;
+	V[Now] = true;
 	for(std::vector<int>::iterator it = Map[Now].begin();it!=Map[Now].end();it++)
 		Get_ans(*it);
+	Vis[Now] = false;
 }
 
 int main()
@@ -44,13 +47,13 @@ int main()
 			Map[u].push_back(v);
 		}
 		for(int i = 0;i<n;i++)
-			if(Vis[i]==false)
+			if(V[i]==false)
 				Get_ans(i);
 		if(Flag==true)std::cout<<"No";
 		else std::cout<<"Yes";
 		std::cout<<std::endl;
 		Flag = false;
-		for(int i = 0;i<=n;i++)Vis[i] = false;
+		for(int i = 0;i<=n;i++)Vis[i] = V[i] = false;
 	}
 	return 0;
 }
