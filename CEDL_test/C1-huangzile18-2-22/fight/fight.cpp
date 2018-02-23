@@ -3,6 +3,7 @@
 #include<fstream>
 #include<cstdio>
 #include<algorithm>
+#include<queue>
 #define gi get_int()
 #define INF 0x3f3f3f3f
 
@@ -15,16 +16,36 @@ int get_int()
 	return x*y;
 }
 
-int Num[100001];
+int c[100001];
+std::priority_queue<int> Q;
 
 int main()
 {
 	freopen("fight.in","r",stdin);
 	freopen("fight.out","w",stdout);
 	int n = gi,X = gi,Y = gi,A = gi,B = gi;
-	int S;
-	if(B%X==0)S = B/X;
-	else S = B/X+1;
-	std::cout<<"Win"<<std::endl<<S;
+	for(int i = 0;i<n;i++)
+		c[i] = gi;
+	int H = B;
+	int Max_Hurt = -INF;
+	for(int i = 0;i<n;i++)
+	{
+		B-=X;
+		if(B<=0)
+		{
+			std::cout<<"Win"<<std::endl<<i+1;
+			return 0;
+		}
+		Max_Hurt = std::max(Max_Hurt,H-B);
+		A-=c[i];
+		Q.push(c[i]);
+		while(A<=0&&!Q.empty())
+		{
+			A+=std::max(Q.top(),Y);
+			B+=X;
+			Q.pop();
+		}
+	}
+	std::cout<<"Lose"<<std::endl<<Max_Hurt;
 	return 0;
 }
