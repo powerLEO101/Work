@@ -26,6 +26,7 @@ void Get_ans(int Now)
 		Flag = true;
 		return;
 	}
+	if(V[Now]==true)return;
 	Vis[Now] = true;
 	V[Now] = true;
 	for(std::vector<int>::iterator it = Map[Now].begin();it!=Map[Now].end();it++)
