@@ -3,6 +3,7 @@
 #include<fstream>
 #include<cstdio>
 #include<algorithm>
+#include<functional>
 #define gi get_int()
 #define INF 0x3f3f3f3f
 
@@ -15,32 +16,31 @@ int get_int()
 	return x*y;
 }
 
-int Num[300001],Dish[300001];
+int Num[300001];
 
 int main()
 {
 	freopen("kra.in","r",stdin);
 	freopen("kra.out","w",stdout);
 	int n = gi,m = gi;
-	for(int i = 0;i<n;i++)
-		Num[i] = gi;
-	for(int i = 0;i<m;i++)
-		Dish[i] = gi;
-	for(int i = 0;i<m-1;i++)
+	for(int i = 0;i<n;i++)Num[i] = gi;
+	for(int i = 1;i<n;i++)Num[i] = std::min(Num[i],Num[i-1]);
+	int Ans = n+1;
+	while(m--)
 	{
-		int Val = Dish[i];
-		for(int j = 0;j<n;j++)
-			if(Num[j]<Val)
-				Num[j] = 0;
-	}
-	int Val = Dish[m-1];
-	for(int i = 0;i<n;i++)
-	{
-		if(Num[i]<Val)
+		int Plate = gi,l = 0,r = Ans-1;
+		while(l<=r)
 		{
-			std::cout<<i;
+			int Mid = (l+r)/2;
+			if(Num[Mid]>=Plate)Ans = Mid,l = Mid+1;
+			else r = Mid-1;
+		}
+		if(Ans<=0)
+		{
+			std::cout<<0;
 			return 0;
 		}
 	}
+	std::cout<<Ans+1;
 	return 0;
 }
