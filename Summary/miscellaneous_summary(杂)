@@ -1,0 +1,35 @@
+杂
+*ubuntu如何使用蓝牙音响
+先给电脑连上蓝牙模块（如果自带了就不用）
+然后播放的时候要点一下声音那里的sound settings，选择output，点击你的蓝牙音响，看到蓝牙音响那里变成深色，就可以了
+*CJ机房网络配置
+CJ的机房（ubuntu）有时会没有，如果不是没插网线之类的，可以尝试重新配置
+先点最上面wifi标志->编辑连接
+把所有的连接都删掉，新建->以太网，看一下别人的配置，注意MAC地址也要写。
+*Ctrl+; 可以查看之前五个的复制记录
+*主题和图标
+ubuntu的主题保存在/usr/share/themes
+ubuntu的图标主题保存在/usr/share/icons
+可以直接复制
+*python小爬虫
+xxx = urllib2.urlopen(url) 表示获取这可网站的源代码,被赋值给xxx
+xxx.read() 表示返回网页的源代码
+*ubuntu、查找文件里的内容
+grep "你要查找的内容" 文件名 表示在问价命令查找你要查找的内容，文件名可以是*也就是说可以查找所有文件，后面可以加上-R参数，表示递归查找，最常用的代码如下:
+grep "你要查找的内容" * -R 表示在当前文件夹内查找所有你要查找的内容，递归查找
+
+
+按照一下步骤执行：
+sudo apt-get install zsh git
+git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh 
+udo gedit ~/.zshrc
+复制以下代码到.zshrc：
+```
+export ZSH=$HOME/.oh-my-zsh
+ZSH_THEME="robbyrussell"
+plugins=(git)
+source $ZSH/oh-my-zsh.sh
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+```
+然后chsh -s /bin/zsh
+注销
