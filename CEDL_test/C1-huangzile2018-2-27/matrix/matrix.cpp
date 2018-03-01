@@ -1,77 +1,45 @@
 #include<iostream>
+#include<iomanip>
+#include<fstream>
 #include<cstdio>
 #include<algorithm>
-#include<cstdlib>
-#include<ctime>
+#define gi get_int()
 
-int Num[2001][2001];
-int n;
-
-int Get_ans(int i,int j)
+int get_int()
 {
-	int Ans = 0;
-	int Sum = 0;
-	for(int k = 0;k<n;k++)
-	{
-		int Val;
-		if(i==0)Val = Num[k][j];
-		else Val = Num[k][j]-Num[k][i-1];
-		if(Val==0)Sum+=1;
-		else Sum = 0;
-		Ans = std::max(Sum*(j-i+1),Ans);
-	}
-	return Ans;
+	int x = 0,y = 1;char ch = getchar();
+	while((ch<'0'||ch>'9')&&ch!='-')ch = getchar();
+	if(ch=='-')y = -1,ch = getchar();
+	while(ch>='0'&&ch<='9')x = x*10+ch-'0',ch = getchar();
+	return x*y;
 }
 
-void CASE1()
-{
-	srand(time(0));
-	scanf("%d",&n);
-	for(int i = 0;i<n;i++)
-	for(int j = 0;j<n;j++)
-		scanf("%d",&Num[i][j]);
-	for(int i = 0;i<n;i++)
-	for(int j = 0;j<n;j++)
-		Num[i][j]+=Num[i][j-1];
-	int Ans;
-	while(clock()<=910000)
-	{
-		int l = rand()%n;
-		int r = l+(rand()%(n-l));
-		Ans = std::max(Get_ans(l,r),Ans);
-	}
-	std::cout<<Ans;
-}
+int Num[2002][2002],Up[2002][2002],Down[2002][2002];
 
 int main()
 {
 	freopen("matrix.in","r",stdin);
 	freopen("matrix.out","w",stdout);
-	scanf("%d",&n);
+	int n = gi,Ans = 0;
 	for(int i = 0;i<n;i++)
 	for(int j = 0;j<n;j++)
-		scanf("%d",&Num[i][j]);
+		Num[i][j] = gi;
 	for(int i = 0;i<n;i++)
 	for(int j = 0;j<n;j++)
-		Num[i][j]+=Num[i][j-1];	
-	if(n>=500)
-	{
-		CASE1();
-		return 0;
-	}
-	int Ans = 0;
+		Up[i][j] = Num[i][j]==1?0:Up[i-1][j]+1;
+	for(int i = n-1;i>=0;i--)
+	for(int j = 0;j<n;j++)
+		Down[i][j] = Num[i][j]==1?0:Down[i+1][j]+1;
 	for(int i = 0;i<n;i++)
-	for(int j = i+1;j<n;j++)
 	{
-		int Sum = 0;
-		for(int k = 0;k<n;k++)
+		int Min_up = n,Min_down = n,l = 0;
+		for(int j = 0;j<n;j++)
 		{
-			int Val;
-			if(i==0)Val = Num[k][j];
-			else Val = Num[k][j]-Num[k][i-1];
-			if(Val==0)Sum+=1;
-			else Sum = 0;
-			Ans = std::max(Sum*(j-i+1),Ans);
+			if(Num[i][j]==1){Min_up = n,Min_down = n,l = 0;continue;}
+			l++;
+			Min_up = std::min(Min_up,Up[i][j]);
+			Min_down = std::min(Min_down,Down[i][j]);
+			Ans = std::max(l*(Min_up+Min_down-1),Ans);
 		}
 	}
 	std::cout<<Ans;
