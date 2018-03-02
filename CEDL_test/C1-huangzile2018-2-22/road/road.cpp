@@ -17,24 +17,21 @@ int Num[100001];
 class Node
 {
 public:
-	int Val,Size;
+	int Val;
 	Node* l_son,* r_son;
-Node(int Val)
+Node(int v)
 {
-	Val = Val;
-	Size = 1;
+	Val = v;
 	l_son = r_son = NULL;
 }
 };
-Node* Stack[100000 << 1];
-int Top = -1,l[100000 << 1],r[100000 << 1],Size[100000 << 1];
-Node* Merge(Node*& u,Node*& v)
+Node* Stack[200000];
+int Top = 0,l[200000],r[200000],Size[200000];
+Node* Merge(Node* u,Node* v)
 {
 	if(u==NULL||v==NULL)return u==NULL?v:u;
 	if(u->Val<v->Val)std::swap(u,v);
 	u->r_son = Merge(u->r_son,v);
-	if(u->l_son==NULL||u->r_son==NULL)
-		u->Size = u->l_son==NULL?u->r_son->Size:u->l_son->Size;
 	std::swap(u->l_son,u->r_son);
 	return u;
 }
@@ -54,22 +51,20 @@ int main()
 		Stack[++Top] = new Node(Num[i]);
 		l[Top] = r[Top] = i;
 		Size[Top] = 1;
-		if(i==0)continue;
-		while(Top!=0&&Stack[Top]->Val<Stack[Top-1]->Val)
+		if((Top-1)==0)continue;
+		while(Top>1&&Stack[Top]->Val<Stack[Top-1]->Val)
 		{
-			Size[Top-1] += Size[Top];
-			r[Top-1] = r[Top];
-			Stack[Top-1] = Merge(Stack[Top],Stack[--Top]);
-			while(Stack[Top]->Size>((r[Top]-l[Top]+2)/2))Delete(Stack[Top]),Size[Top]--;
+			Top--;
+			Stack[Top] = Merge(Stack[Top],Stack[Top+1]);
+			Size[Top] += Size[Top+1];
+			r[Top] = r[Top+1];
+			while(Size[Top]>((r[Top]-l[Top]+2)/2)&&Size[Top]>1)Delete(Stack[Top]),Size[Top]--;
 		}
 	}
 	long long Ans = 0;
-	for(int i = 0;i<=Top;i++)
-	{
-		std::cout<<l[i]<<" "<<r[i]<<" "<<Stack[i]->Val<<std::endl;
+	for(int i = 1;i<=Top;i++)
 		for(int j = l[i];j<=r[i];j++)
 			Ans+=abs(Stack[i]->Val-Num[j]);
-	}
 	std::cout<<Ans;
 	return 0;
 }
