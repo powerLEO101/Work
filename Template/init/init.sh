@@ -17,4 +17,3 @@ ssh-keygen -t rsa -C "3256870400@qq.com"
 sudo add-apt-repository ppa:a-v-shkop/chromium
 sudo apt-get update
 sudo apt-get install chromium-browser
-
