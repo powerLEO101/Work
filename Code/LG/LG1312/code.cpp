@@ -1,117 +1,135 @@
 #include<iostream>
-#include<iomanip>
-#include<fstream>
+#include<cstdio>
 #include<algorithm>
+#include<vector>
 #include<cstring>
-
-int Step,map[100][100],output[100][10];
-
-void clear()
+#define gi get_int()
+int get_int()
 {
-loop:
-	for(int i = 1;i<7;i++)
-	for(int j = 0;j<5;j++)
-	{
-		if(map[i][j]!=0&&map[i-1][j]==0)
+	int x = 0,y = 1;char ch = getchar();
+	while((ch<'0'||ch>'9')&&ch!='-')ch = getchar();
+	if(ch=='-')y = -1,ch = getchar();
+	while(ch<='9'&&ch>='0')x = x*10+ch-'0',ch = getchar();
+	return x*y;
+}
+
+int Map[10][10],n;
+bool State[10][10];
+
+void Copy(int a[10][10],int b[10][10])
+{
+	for(int i = 0;i<10;i++)
+	for(int j = 0;j<10;j++)
+		a[i][j] = b[i][j];
+}
+bool Clear(int map[10][10])
+{
+	for(int i = 0;i<5;i++)
+		for(int j = 0;j<7;j++)
 		{
-			int k = i;
-			while(k>=1&&map[i-1][j]==0)
-			{
-				std::swap(map[k][j],map[k-1][j]);
-				k--;
-			}
+			if(map[i][j]==0)continue;
+			if(map[i][j]!=-1)continue;
+			map[i][j] = map[i][j+1];
+			map[i][j+1] = -1;
 		}
-	}
-	bool cls[100][100],can = false;
+	for(int i = 0;i<5;i++)
+	for(int j = 0;j<7;j++)
+		if(map[i][j]==-1)map[i][j] = 0;
+	memset(State,0,sizeof(State));
+	for(int i = 0;i<5;i++)
+	for(int j = 1;j<6;j++)
+		if(map[i][j]==map[i][j-1]&&map[i][j]==map[i][j+1]&&map[i][j]!=0)
+			State[i][j] = State[i][j+1] = State[i][j-1] = true;
+	for(int j = 0;j<7;j++)
+	for(int i = 1;i<4;i++)
+		if(map[i][j]==map[i-1][j]&&map[i][j]==map[i+1][j]&&map[i][j]!=0)
+			State[i][j] = State[i+1][j] = State[i-1][j] = true;
+	bool Ret = false;
 	for(int i = 0;i<5;i++)
 	for(int j = 0;j<7;j++)
 	{
-		if(map[i][j]!=0&&map[i][j+1]==map[i][j]&&map[i][j+2]==map[i][j])
+		if(State[i][j]==true)
 		{
-			can = true;
-			cls[i][j] = cls[i][j+1] = cls[i][j+2] = true;
-		}
-		if(map[i][j]!=0&&map[i+1][j]==map[i][j]&&map[i+2][j]==map[i][i])
-		{
-			can = true;
-			cls[i][j] = cls[i+1][j] = cls[i+2][j] = true;
+			map[i][j] = -1,
+			Ret = true;
+			std::cout<<"#"<<i<<" "<<j;
 		}
 	}
-	if(can=false)return;
-	for(int i = 0;i<7;i++)
-	for(int j = 0;j<5;j++)
-		if(cls[i][j]==true)
-			map[i][j] = 0;
-	goto loop;
-}
-
-void get_ans(int step)
-{
-	if(step==Step)
+	for(int i = 0;i<5;i++)
 	{
-		bool flag = false;
-		for(int i = 0;i<7;i++)
-		for(int j = 0;j<5;j++)
-			if(map[i][j]!=0)flag = true;
-		if(flag==false)
-		{
-			for(int i = 0;i<step;i++)std::cout<<output[i][0]<<" "<<output[i][1]<<" "<<output[i][2]<<std::endl;
-			
-		}
-		exit(0);
+		for(int j = 0;j<7;j++)
+			std::cout<<map[i][j]<<" ";
+		std::cout<<std::endl;
 	}
-	int color[11];
-	memset(color,0,sizeof(color));
-	for(int i = 0;i<7;i++)
-		for(int j = 0;j<5;j++)
-			color[map[i][j]]++;
-	for(int i = 0;i<11;i++)
-		if(color[i]==1||color[i]==2)
-			return;
-	int now_map[100][100];
-	memcpy(now_map,map,sizeof(map));
-	for(int j = 0;j<5;j++)
-		for(int i = 0;i<7;i++)
+	std::cout<<std::endl;
+	std::cout<<Ret<<std::endl;
+	return Ret;
+}
+bool Judge(int map[10][10])
+{
+	for(int i = 0;i<5;i++)
+	for(int j = 0;j<7;j++)
+		if(map[i][j]!=0)return false;
+	return true;
+}
+class Node
+{
+public:
+	int x,y,Mode;
+};
+std::vector<Node> Steps;
+bool Get_ans(int Step)
+{
+	if(Judge(Map)==true)return true;
+	if(Step==n)return false;
+	int Map1[10][10];Copy(Map1,Map);
+	while(Clear(Map)==true);
+	for(int i = 0;i<5;i++)
+	for(int j = 0;j<7;j++)
+	{
+		if(Map[i][j]==0)continue;
+		if(i!=0)
 		{
-			if(map[i][j]==0)continue;
-			if(j!=4&&now_map[i][j]!=now_map[i][j+1])
+			std::swap(Map[i][j],Map[i-1][j]);
+			if(Get_ans(Step+1)==true)
 			{
-				memcpy(map,now_map,sizeof(now_map));
-				std::swap(map[i][j],map[i][j+1]);
-				clear();
-				output[step][0] = i;
-				output[step][1] = j;
-				output[step][2] = 1;
-				get_ans(step+1);
-			}
-			if(j!=0&&map[i][j-1]==0&&map[i][j]!=map[i][j-1])
-			{
-				memcpy(map,now_map,sizeof(now_map));
-				std::swap(map[i][j],map[i][j-1]);
-				clear();
-				output[step][0] = i;
-				output[step][1] = j;
-				output[step][2] = -1;
-				get_ans(step-1);
+				Steps.push_back((Node){i+1,j+1,-1});
+				return true;
 			}
 		}
+		Copy(Map,Map1);
+		if(i!=4)
+		{
+			std::swap(Map[i][j],Map[i+1][j]);
+			if(Get_ans(Step-1)==true)
+			{
+				Steps.push_back((Node){i+1,j+1,1});
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 int main()
 {
-	std::cin>>Step;
+	freopen("code.in","r",stdin);
+	freopen("code.out","w",stdout);
+	n = gi;
 	for(int i = 0;i<5;i++)
 	{
-		int temp,j = 0;
-		std::cin>>temp;
-		while(temp!=0)
+		int Num = gi,Index = 0;
+		while(Num!=0)
 		{
-			map[j++][i] = temp;
-			std::cin>>temp;
+			Map[i][Index++] = Num;
+			Num = gi;
 		}
 	}
-	std::cout<<123;
-	get_ans(0);
-	std::cout<<-1;
+	if(Get_ans(0)==false)std::cout<<-1;
+	else
+	{
+		for(int i = Steps.size()-1;i>=0;i--)
+			std::cout<<Steps[i].x<<" "<<Steps[i].y<<" "<<Steps[i].Mode<<std::endl;
+	}
 	return 0;
 }
