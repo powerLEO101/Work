@@ -13,7 +13,7 @@ int get_int()
 	return x*y;
 }
 
-int Map[10][10],n;
+int Map[10][10],n,Color[100];
 bool State[10][10];
 
 void Copy(int a[10][10],int b[10][10])
@@ -24,11 +24,22 @@ void Copy(int a[10][10],int b[10][10])
 }
 bool Clear(int map[10][10])
 {
+	bool Flag = false;
 	for(int i = 0;i<5;i++)
 		for(int j = 0;j<7;j++)
 		{
-			if(map[i][j]==0)continue;
-			if(map[i][j]!=-1)continue;
+			if(map[i][j]==0)
+			{
+				if(Flag==true)
+					for(int k = j;k<7;k++)map[i][k] = map[i][k+1];
+				continue;
+			}
+			if(map[i][j]!=-1)
+			{
+				if(map[i][j]!=0)
+					Flag = true;
+				continue;
+			}
 			map[i][j] = map[i][j+1];
 			map[i][j+1] = -1;
 		}
@@ -52,7 +63,6 @@ bool Clear(int map[10][10])
 		{
 			map[i][j] = -1,
 			Ret = true;
-			std::cout<<"#"<<i<<" "<<j;
 		}
 	}
 	for(int i = 0;i<5;i++)
@@ -80,16 +90,34 @@ public:
 std::vector<Node> Steps;
 bool Get_ans(int Step)
 {
+	while(Clear(Map)==true);
 	if(Judge(Map)==true)return true;
 	if(Step==n)return false;
 	int Map1[10][10];Copy(Map1,Map);
-	while(Clear(Map)==true);
+	memset(Color,0,sizeof(Color));
+	for(int i = 0;i<5;i++)
+	for(int j = 0;j<7;j++)
+		Color[Map[i][j]]++;
+	for(int i = 1;i<11;i++)
+		if(Color[i]!=0&&Color[i]<3)return false;
 	for(int i = 0;i<5;i++)
 	for(int j = 0;j<7;j++)
 	{
 		if(Map[i][j]==0)continue;
+		if(i!=4)
+		{
+			if(Map[i][j]==Map[i+1][j])continue;
+			std::swap(Map[i][j],Map[i+1][j]);
+			if(Get_ans(Step+1)==true)
+			{
+				Steps.push_back((Node){i+1,j+1,1});
+				return true;
+			}
+		}
+		Copy(Map,Map1);
 		if(i!=0)
 		{
+			if(Map[i-1][j]!=0)continue;
 			std::swap(Map[i][j],Map[i-1][j]);
 			if(Get_ans(Step+1)==true)
 			{
@@ -98,16 +126,8 @@ bool Get_ans(int Step)
 			}
 		}
 		Copy(Map,Map1);
-		if(i!=4)
-		{
-			std::swap(Map[i][j],Map[i+1][j]);
-			if(Get_ans(Step-1)==true)
-			{
-				Steps.push_back((Node){i+1,j+1,1});
-				return true;
-			}
-		}
 	}
+	Copy(Map,Map1);
 	return false;
 }
 
