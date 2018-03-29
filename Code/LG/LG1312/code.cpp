@@ -26,26 +26,17 @@ bool Clear(int map[10][10])
 {
 	bool Flag = false;
 	for(int i = 0;i<5;i++)
-		for(int j = 0;j<7;j++)
+		for(int j = 6;j>=0;j--)
 		{
-			if(map[i][j]==0)
+			if(map[i][j]==0&&Flag==false)continue;
+			if(map[i][j]==0&&Flag==true)
 			{
-				if(Flag==true)
-					for(int k = j;k<7;k++)map[i][k] = map[i][k+1];
-				continue;
+				for(int k = j;k<6;k++)
+					map[i][k] = map[i][k+1],
+					map[i][k+1] = 0;
 			}
-			if(map[i][j]!=-1)
-			{
-				if(map[i][j]!=0)
-					Flag = true;
-				continue;
-			}
-			map[i][j] = map[i][j+1];
-			map[i][j+1] = -1;
+			if(map[i][j]!=0)Flag = true;
 		}
-	for(int i = 0;i<5;i++)
-	for(int j = 0;j<7;j++)
-		if(map[i][j]==-1)map[i][j] = 0;
 	memset(State,0,sizeof(State));
 	for(int i = 0;i<5;i++)
 	for(int j = 1;j<6;j++)
@@ -61,10 +52,11 @@ bool Clear(int map[10][10])
 	{
 		if(State[i][j]==true)
 		{
-			map[i][j] = -1,
+			map[i][j] = 0,
 			Ret = true;
 		}
 	}
+	/*
 	for(int i = 0;i<5;i++)
 	{
 		for(int j = 0;j<7;j++)
@@ -73,6 +65,7 @@ bool Clear(int map[10][10])
 	}
 	std::cout<<std::endl;
 	std::cout<<Ret<<std::endl;
+	*/
 	return Ret;
 }
 bool Judge(int map[10][10])
@@ -110,7 +103,7 @@ bool Get_ans(int Step)
 			std::swap(Map[i][j],Map[i+1][j]);
 			if(Get_ans(Step+1)==true)
 			{
-				Steps.push_back((Node){i+1,j+1,1});
+				Steps.push_back((Node){i,j,1});
 				return true;
 			}
 		}
@@ -121,7 +114,7 @@ bool Get_ans(int Step)
 			std::swap(Map[i][j],Map[i-1][j]);
 			if(Get_ans(Step+1)==true)
 			{
-				Steps.push_back((Node){i+1,j+1,-1});
+				Steps.push_back((Node){i,j,-1});
 				return true;
 			}
 		}
