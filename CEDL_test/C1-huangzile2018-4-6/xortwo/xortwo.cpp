@@ -51,8 +51,6 @@ void CASE2()
 			{
 				T = T%(Count),
 				F = true;
-				std::cout<<Count<<std::endl;
-				std::cout<<T<<std::endl;
 			}
 			Count++;
 		}
