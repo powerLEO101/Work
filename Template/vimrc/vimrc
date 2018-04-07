@@ -1,0 +1,15 @@
+"""""""""""""""""""""""
+"      By Leo101      "
+"""""""""""""""""""""""
+set nu
+set mouse=a
+autocmd BufNewFile *.cpp 0r ~/.cpp
+set showcmd
+if has("syntax")
+	syntax on
+endif
+set autoread
+map<F8> :vsp %<.out<CR><C-w>L:sp %<.in<CR><C-w><C-w><C-w><C-w>65<C-w>>
+map<F9> :w<CR>:!printf "Compile with O2\n" && g++ % -o %< -Wall -O2 && time ./%<<CR>
+map<F10> :w<CR>:!g++ % -o %< -Wall && time ./%<<CR>
+
