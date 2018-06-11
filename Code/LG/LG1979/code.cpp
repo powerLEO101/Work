@@ -1,118 +1,118 @@
-#include<iostream>
-#include<cstdio>
-#include<algorithm>
-#include<cstring>
-#include<queue>
-#define gi get_int()
-#define INF 0x3f3f3f3f
-#define File(name) freopen(#name".in","r",stdin);freopen(#name".out","w",stdout)
-int get_int()
+#include<bits/stdc++.h>
+#define RG register
+#define clear(x, y) memset(x, y, sizeof(x));
+using namespace std;
+
+inline int read()
 {
-	int x = 0,y = 1;char ch = getchar();
-	while((ch<'0'||ch>'9')&&ch!='-')ch = getchar();
-	if(ch=='-')y = -1,ch = getchar();
-	while(ch<='9'&&ch>='0')x = x*10+ch-'0',ch = getchar();
-	return x*y;
+	int data=0, w=1;
+	char ch=getchar();
+	while(ch!='-'&&(ch<'0'||ch>'9')) ch=getchar();
+	if(ch=='-') w=-1, ch=getchar();
+	while(ch>='0'&&ch<='9') data=(data<<3)+(data<<1)+(ch^48), ch=getchar();
+	return data*w;
 }
 
-int Map[101][101],Skip[101][101][4][4];
-int n,m,q;
-Pos F[4],FF[4];
-
-struct Pos
+const int maxn(40), I(1061109567), x[4]={0, 1, 0, -1}, y[4]={1, 0, -1, 0};
+struct node { int x, y, k; };
+inline bool operator == (const node &a, const node &b)
 {
-	int x,y;
-	Pos(int a,int b):x(a), y(b) {}
-	Pos operator+ (const Pos& a,const Pos& b)const
-	{
-		a.x+=b.x;
-		a.y+=b.y;
-	}
-	bool operator== (const Pos& a,const Pos& b)const
-	{
-		if(a.x==b.x&&a.y==b.y)return true;
-		return false;
-	}
-};
-struct Data
-{
-	int x,y,f;
-};
-
-bool Vis[101][101];
-int Bfs(Pos S,Pos T)
-{
-	if(Map[S.x][S.y]==0||Map[T.x][T.y]==0)return INF;
-	std::queue<Pos> Q;
-	std::queue<int> Dist;
-	Q.push(S);
-	Q.push(0);
-	Vis[S.x][S.y] = true;
-	while(!Q.empty())
-	{
-		Pos Now = Q.front();Q.pop();
-		int D = Dist.front();Dist.pop();
-		for(int i = 0;i<4;i++)
-		{
-			Pos Temp = Now+F[i];
-			if(Map[Temp.x][Temp.y]==0||Vis[Temp.x][Temp.y]==true)continue;
-			Vis[Temp.x][Temp.y] = true;
-			if(Temp==T)return D+1;
-			Q.push(Temp);
-			Dist.push(D+1);
-		}
-		Vis[Now.x][Now.y] = true;
-	}
-	return INF;
+	return !(a.x^b.x||a.y^b.y);
 }
-void Init()
+
+int g[maxn][maxn], dis[maxn][maxn][4], ex, ey, sx, sy,
+	tx, ty, mov[maxn][maxn][4][4], n, m, deep[maxn][maxn];
+bool inq[maxn][maxn][4], vis[maxn][maxn];
+queue<node> q, p;
+inline bool ing(const node &x) { return x.x>0 && x.x<=n && x.y>0 && x.y<=m; }
+inline int tran(int k) { return (k<2) ? k+2 : k-2; }
+inline node go(node a, int k) { return (node){a.x+x[k], a.y+y[k]}; }
+inline int BFS(node s, node t) // The queue is q!
 {
-	F[0] = F[1] = (Pos){-1,0};
-	F[1] = F[0] = (Pos){1,0};
-	F[2] = F[3] = (Pos){0,-1};
-	F[3] = F[2] = (Pos){0,1};
-	memset(Skip,0x3f,sizeof(Skip));
-	for(int i = 0;i<n;i++)
-	for(int j = 0;j<m;j++)
+	if(!(g[s.x][s.y] && g[t.x][t.y])) return I;
+	clear(vis, 0); clear(deep, 63);
+	q.push(s); deep[s.x][s.y]=0; vis[s.x][s.y]=true;
+	while((!q.empty()) && (!vis[t.x][t.y]))
 	{
-		if(Map[i][j]==0)continue;
-		Map[i][j] = 0;
-		Pos Now(i,j);
-		for(int a = 0;a<4;a++)
-		for(int b = 0;b<4;b++)
+		node x=q.front(); q.pop();
+		for(RG int i=0;i<4;i++)
 		{
-			if(a>b)
-				Skip[i][j][a][b] = Skip[i][j][b][a];
-			else Skip[i][j][a][b] = Bfs(Now+F[a],Now+F[b])+1;
+			node y=go(x, i); if(!ing(y)) continue;
+			if((!vis[y.x][y.y]) && g[y.x][y.y])
+				vis[y.x][y.y]=true, q.push(y), deep[y.x][y.y]=deep[x.x][x.y]+1;
 		}
-		Map[i][j] = 1;
 	}
+	while(!q.empty()) q.pop();
+	return deep[t.x][t.y];
+}
+
+inline void init()
+{
+	clear(mov, 63);
+	for(RG int i=1;i<=n;i++)
+		for(RG int j=1;j<=m;j++)
+		{
+			if(!g[i][j]) continue;
+			g[i][j]=0;
+			for(RG int k=0;k<4;k++)
+				for(RG int l=0;l<4;l++)
+				{
+					if(l<k) { mov[i][j][k][l]=mov[i][j][l][k]; continue; }
+					node a=go((node){i, j}, k), b=go((node){i, j}, l);
+					if(!ing(a) || !ing(b) || !(g[a.x][a.y] && g[b.x][b.y]))
+						continue;
+					mov[i][j][k][l]=BFS(a, b)+1;
+				}
+			g[i][j]=1;
+		}
+}
+
+inline int spfa(node s, node t) // The queue is p!
+{
+	if(s==t) return 0;
+	if(!(g[s.x][s.y] && g[t.x][t.y])) return I;
+	clear(dis, 63); clear(inq, 0);
+	g[s.x][s.y]=0; static node x, y;
+	for(RG int i=0;i<4;i++)
+	{
+		x=go(s, i);
+		if(!ing(x) || !g[x.x][x.y]) continue;
+		p.push((node){s.x, s.y, i}); inq[s.x][s.y][i]=true;
+		dis[s.x][s.y][i]=BFS((node){ex, ey}, x);
+	}
+	g[s.x][s.y]=1;
+#define POS(p) [p.x][p.y][p.k]
+	while(!p.empty())
+	{
+		x=p.front(); p.pop();
+		inq POS(x)=false;
+		for(RG int i=0;i<4;i++)
+		{
+			y=go(x, i); y.k=tran(i);
+			if(dis POS(x) + mov POS(x)[i] < dis POS(y))
+			{
+				dis POS(y) = dis POS(x) + mov POS(x)[i];
+				if(!inq POS(y)) p.push(y), inq POS(y) = true;
+			}
+		}
+	}
+#undef POS(p)
+	static int ans; ans=I;
+	for(RG int i=0;i<4;i++) ans=min(ans, dis[t.x][t.y][i]);
+	return ans;
 }
 
 int main()
 {
-	File(code);
-	n = gi,m = gi,q = gi;
-	for(int i = 0;i<n;i++)
-	for(int j = 0;j<n;j++)
-		Map[i][j] = gi;
-	Init();
-	std::queue<Data> Q;
+	n=read(); m=read(); RG int q=read(), ans;
+	for(RG int i=1;i<=n;i++) for(RG int j=1;j<=m;j++) g[i][j]=read();
+	init();
 	while(q--)
 	{
-		int Ex = gi,Ey = gi,Sx = gi,Sy = gi,Tx = gi,Ty = gi;
-		if(Map[Sx][Sy]==0||Map[Tx][Ty]==0)
-		{
-			std::cout<<-1<<std::endl;
-			continue;
-		}
-		if(Sx==Tx&&Sy==Ty)
-		{
-			std::cout<<0<<std::endl;
-			continue;
-		}
-		std::cout<<SPFA();
+		ex=read(); ey=read(); sx=read(); sy=read(); tx=read(); ty=read();
+		ans=spfa((node){sx, sy}, (node){tx, ty});
+		if(ans < I) printf("%d\n", ans);
+		else puts("-1");
 	}
 	return 0;
 }
-
