@@ -14,6 +14,7 @@ int get_int()
 
 int main()
 {
-	File();
+	File(maou);
+	std::cout<<4;
 	return 0;
 }

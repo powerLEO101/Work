@@ -14,6 +14,7 @@ int get_int()
 
 int main()
 {
-	File();
+	File(rezero);
+
 	return 0;
 }
