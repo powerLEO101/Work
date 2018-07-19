@@ -1,1 +1,0 @@
-/home/leo101/Work/Code/CEDL_test/C1-huangzile2018-7-16/bridge/bridge.cpp
