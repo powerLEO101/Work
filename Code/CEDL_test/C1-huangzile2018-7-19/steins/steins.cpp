@@ -1,9 +1,10 @@
 #include<iostream>
 #include<cstdio>
 #include<algorithm>
-#include<cstring>
 #define File(s) freopen(#s".in","r",stdin);freopen(#s".out","w",stdout)
 #define gi get_int()
+#define _ 10000001
+#define MOD 1000000007
 int get_int()
 {
 	int x = 0,y = 1;char ch = getchar();
@@ -13,25 +14,11 @@ int get_int()
 	return x*y;
 }
 
-int x[101],y[101],Num;
-bool pd[10000];
-
-void Get_ans(int Now,int Ans)
-{
-	if(Now==0)
-		if(pd[Ans]==false)
-		{
-			pd[Ans] = true;
-			Num++;
-			return;
-		}
-		else return;
-	int Temp = Ans;
-	for(int i = x[Now];i<=y[Now];i++)
-		Temp = Temp^(1<<i);
-	Get_ans(Now-1,Temp);
-	Get_ans(Now-1,Ans);
-}
+int Father[10000000];
+void init(){for(int i = 0;i<_;i++)Father[i] = i;}
+int Get_father(int u){return Father[u]==u?u:Father[u] = Get_father(Father[u]);}
+void Merge(int u,int v){Father[Get_father(u)] = Get_father(v);}
+bool Query(int u,int v){return Get_father(u)==Get_father(v);}
 
 int main()
 {
@@ -40,13 +27,19 @@ int main()
 	while(T--)
 	{
 		int n = gi,m = gi;
+		init();
+		long long Ans = 1;
 		for(int i = 0;i<m;i++)
-			x[i] = gi,
-			y[i] = gi;
-		Get_ans(m,0);
-		std::cout<<Num<<std::endl;
-		Num = 0;
-		memset(pd,0,sizeof(pd));
+		{
+			int l = gi,r = gi+1;
+			if(Query(l,r)==false)
+			{
+				Merge(l,r);
+				Ans = (Ans<<1)%MOD;
+			}
+		}
+		std::cout<<Ans<<std::endl;
 	}
 	return 0;
 }
+
