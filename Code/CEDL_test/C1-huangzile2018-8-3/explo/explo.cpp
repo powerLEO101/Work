@@ -3,7 +3,7 @@
 #include<algorithm>
 #define File(s) freopen(#s".in","r",stdin);freopen(#s".out","w",stdout)
 #define gi get_int()
-#define INF 0x3f3f3f3f
+#define _ 100005
 int get_int()
 {
 	int x = 0,y = 1;char ch = getchar();
@@ -13,17 +13,25 @@ int get_int()
 	return x*y;
 }
 
+int Mod[_],Num[_];
+
 int main()
 {
 	File(explo);
-	int n  = gi,k = gi,c = gi,w = gi;
-	int Ans = -INF;
+	int n,w;
+	double c,k;
+	std::cin>>n>>k>>c>>w;
 	for(int i = 0;i<n;i++)
+		Mod[i] = gi,
+		Num[i] = gi;
+	double Ans = 0;
+	k = 1-(0.01*k);
+	c = 1+(0.01*c);
+	for(int i = n-1;i>=0;i--)
 	{
-		int Type = gi,x = gi;
-		if(Type==2)continue;
-		Ans = std::max(Ans,x);
+		if(Mod[i]==1)Ans = std::max(Ans,Ans*k+Num[i]);
+		else Ans = std::max(Ans,Ans*c-Num[i]);
 	}
-	std::cout<<Ans*w<<".00";
+	printf("%0.2lf",Ans*w);
 	return 0;
 }
