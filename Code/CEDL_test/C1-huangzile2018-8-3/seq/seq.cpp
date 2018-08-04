@@ -1,9 +1,11 @@
 #include<iostream>
 #include<cstdio>
 #include<algorithm>
-#define File(s) freopen(#s".in","r",stdin);freopen(#s".out","w",stdout)
-#define gi get_int()
+#include<cstring>
+#define _ 500101
 #define INF 0x3f3f3f3f
+#define gi get_int()
+#define File(s) freopen(#s".in","r",stdin);freopen(#s".out","w",stdout)
 int get_int()
 {
 	int x = 0,y = 1;char ch = getchar();
@@ -12,28 +14,29 @@ int get_int()
 	while(ch<='9'&&ch>='0')x = x*10+ch-'0',ch = getchar();
 	return x*y;
 }
-
-int Num[1001];
-int Sum(int l,int r){return Num[r]-Num[l-1];}
-int Get_ans(int l,int r,int P)
-{
-	int Ans = INF;
-	for(int i = l;i<=r;i++)
-		for(int j = i;j<=r;j++)
-			Ans = std::min(Ans,Sum(i,j)%P);
-	return Ans;
-}
+int Sum[_],w[_];
+bool Map[_];
 
 int main()
 {
 	File(seq);
 	int n = gi,m = gi;
-	Num[0] = gi;
-	for(int i = 1;i<n;i++)Num[i] = gi+Num[i-1];
+	for(int i = 0;i<n;i++)w[i] = gi;
 	for(int i = 0;i<m;i++)
 	{
-		int l = gi-1,r = gi-1,P = gi;
-		std::cout<<Get_ans(l,r,P)<<std::endl;
+		memset(Map,0,sizeof(Map));
+		int u = gi-1,v = gi-1,Mod = gi;
+		Sum[u-1]=0,Map[0]=1;
+		int Ans = INF;
+		for(int j = u;j<=v;j++)
+		{
+			Sum[j] = (Sum[j-1]%Mod+w[j]%Mod)%Mod;
+			for(int p = Sum[j];p>=0;p--)
+				if(Map[p]){Ans = std::min(Ans,Sum[j]-p);break;}
+			if(Ans==0)break;
+			Map[Sum[j]] = true;
+		}
+		std::cout<<Ans<<std::endl;
 	}
 	return 0;
-}
+} 
