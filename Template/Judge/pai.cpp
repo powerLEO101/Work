@@ -21,7 +21,7 @@ int main()
 	int T = 0;
 	while(23333333)
 	{
-		std::cout<<"CASE"<<T++<<"#";
+		std::cout<<"CASE : "<<T++<<"#";
 		system("./make");
 		system("./AC_code");
 		system("./code");
@@ -30,7 +30,7 @@ int main()
 			std::cout<<"WA"<<std::endl;
 			return 0;
 		}
-		std::cout<<"AC"<<std::endl;
+		std::cout<<"AC 妖魔鬼怪快离开！妖魔鬼怪快离开！"<<std::endl;
 	}
 	return 0;
 }
