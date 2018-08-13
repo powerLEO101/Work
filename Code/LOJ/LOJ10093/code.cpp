@@ -1,13 +1,13 @@
 #include<iostream>
 #include<cstdio>
 #include<algorithm>
-#include<cstring>
 #include<stack>
+#include<cstring>
 #define File(s) freopen(#s".in","r",stdin);freopen(#s".out","w",stdout)
 #define gi get_int()
-#define INF 0x3f3f3f3f
 #define for_edge(i,x) for(int i = Head[x];i!=-1;i = Edges[i].Next)
 #define _ 20000
+#define INF 0x3f3f3f3f
 int get_int()
 {
 	int x = 0,y = 1;char ch = getchar();
@@ -29,13 +29,12 @@ void Add_edge(int From,int To)
 	Head[From] = E_num++;
 }
 
-int Dfn[_],Low[_],Tot,Number;
-int Belong[_],Min[_],Money[_];
+int Dfn[_],Low[_],Belong[_],Sum[_],In[_],Out[_],Tot,Number;
 std::stack<int> Stack;
 void Tarjan(int Now)
 {
-	Stack.push(Now);
 	Dfn[Now] = Low[Now] = ++Tot;
+	Stack.push(Now);
 	for_edge(i,Now)
 	{
 		int To = Edges[i].To;
@@ -49,58 +48,49 @@ void Tarjan(int Now)
 	}
 	if(Dfn[Now]!=Low[Now])return;
 	Belong[Now] = ++Number;
-	Min[Number] = Money[Now];
+	Sum[Number] = 1;
 	while(Stack.top()!=Now)
 	{
 		Belong[Stack.top()] = Number;
-		Min[Number] = std::min(Min[Number],Money[Stack.top()]);
+		Sum[Number]++;
 		Stack.pop();
 	}
 	Stack.pop();
 }
 
-int Count[_];
 int main()
 {
 	File(code);
+	int n = gi;
 	memset(Head,-1,sizeof(Head));
-	int n = gi,p = gi;
-	memset(Money,0x3f,sizeof(Money));
-	for(int i = 0;i<p;i++)
-		Money[gi-1] = gi;
-	int m = gi;
-	for(int i = 0;i<m;i++)
-	{
-		int From = gi-1,To = gi-1;
-		Add_edge(From,To);
-	}
 	for(int i = 0;i<n;i++)
 	{
-		if(Dfn[i]!=0||Money[i]==INF)continue;
-		Tarjan(i);
-	}
-	for(int i = 0;i<n;i++)
-		if(Dfn[i]==0)
+		int From = i,To = gi-1;
+		while(To!=-1)
 		{
-			std::cout<<"NO"<<std::endl<<i+1;
-			return 0;
+			Add_edge(From,To);
+			To = gi-1;
 		}
+	}
+	for(int i = 0;i<n;i++)
+		if(Dfn[i]==0)Tarjan(i);
 	for(int i = 0;i<n;i++)
 	{
 		for_edge(j,i)
 		{
 			int To = Edges[j].To;
 			if(Belong[i]==Belong[To])continue;
-			Count[Belong[To]]++;
+			In[Belong[To]]++;
+			Out[Belong[i]]++;
 		}
 	}
-	int Ans = 0;
+	int Ans1 = 0,Max1 = 0,Max2 = 0;
 	for(int i = 1;i<=Number;i++)
 	{
-		if(Count[i]!=0)continue;
-		Ans+=Min[i];
+		if(In[i]==0)Ans1++,Max1++;
+		if(Out[i]==0)Max2++;
 	}
-	std::cout<<"YES"<<std::endl;
-	std::cout<<Ans<<std::endl;
+	if(Number==1)Max1 = Max2 = 0;
+	std::cout<<Ans1<<std::endl<<std::max(Max1,Max2);
 	return 0;
 }
