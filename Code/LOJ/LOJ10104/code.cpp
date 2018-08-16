@@ -77,7 +77,7 @@ int main()
 		long long Ans = 2*(n-1);
 		for(int j = 0;j<Len;j++)
 			for(int k = j+1;k<Len;k++)
-				Ans+=Block[i][j]*Block[i][k]*2;
+				Ans+=1ll*Block[i][j]*Block[i][k]*2;
 		std::cout<<Ans<<std::endl;
 	}
 	return 0;
