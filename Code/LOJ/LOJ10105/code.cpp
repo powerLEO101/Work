@@ -2,9 +2,11 @@
 #include <cstdio>
 #include <algorithm>
 #include <cstring>
+#include <stack>
 #define File(s) freopen(#s".in", "r", stdin); freopen(#s".out", "w", stdout)
 #define gi get_int()
 #define for_edge(i,x) for (int i = Head[x]; i != -1; i = Edges[i].Next)
+#define _ 2000000
 int get_int()
 {
 	int x = 0, y = 1; char ch = getchar();
@@ -23,27 +25,34 @@ class Edge
 public:
 	int Next,To;
 }Edges[_];
-int Head[_],E_num;
+int Head[_], E_num;
 void Add_edge(int From, int To)
 {
 	Edges[E_num] = (Edge){Head[From], To};
 	Head[From] = E_num++;
 }
 
-void Euler(int Begin)
+int Type, In[_], Out[_], Ans[_], Tot;
+bool Vis[_];
+void Euler(int Now)
 {
-	Stack.push(Begin);
-	while (Stack.empty()) {
-		int Now = Stack.top();
-		for_edge(i,
+	for (int& i = Head[Now]; i != -1; i = Edges[i].Next) {
+		int Temp = Type == 1 ? i / 2 : i, y = 1;
+		if (Type == 1)
+			y = i % 2 == 1 ? -1 : 1;
+		if (Vis[Temp] == true) continue;
+		Vis[Temp] = true;
+		Euler(Edges[i].To);
+		Ans[Tot++] = (Temp + 1) * y;
 	}
 }
 
 int main()
 {
 	File(code);
-	int Type = gi;
+	Type = gi;
 	int n = gi, m = gi;
+	memset(Head, -1, sizeof(Head));
 	for (int i = 0; i < m; i++)
 	{
 		int From = gi, To = gi;
@@ -82,5 +91,11 @@ int main()
 		Euler(i);
 		break;
 	}
+	if (Tot != m) {
+		 printf("NO");
+		 return 0;
+	}
+	for (int i = m - 1; i >= 0; i--)
+		printf("%d ", Ans[i]);
 	return 0;
 }
