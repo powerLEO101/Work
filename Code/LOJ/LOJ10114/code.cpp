@@ -18,61 +18,33 @@ int get_int()
 	return x * y;
 }
 
-class Node
+int Ans[_], C[_ * 3], n;
+int Lowbit(int u) {return u & (-u);}
+void Add(int Index, int Value)
 {
-public:
-	Node* l_son,* r_son;
-	int l, r, Value;
-Node() {
-	l_son = r_son = NULL;
-	l = r = Value = 0;
-}
-}* Tree = new Node;
-void Build(Node* Root = Tree)
-{
-	if (Root -> r == Root -> l + 1)
-		return;
-	Root -> l_son = new Node;
-	Root -> r_son = new Node;
-	Root -> l_son -> l = Root -> l;
-	Root -> l_son -> r = (Root -> l + Root -> r) / 2;
-	Root -> r_son -> l = (Root -> l + Root -> r) / 2;
-	Root -> r_son -> r = Root -> r;
-	Build(Root -> l_son);
-	Build(Root -> r_son);
-}
-void Change(int Index, int Val, Node* Root = Tree)
-{
-	if (Root -> r <= Index || Index < Root -> l) return;
-	if (Root -> r == Root -> l + 1) {
-		Root -> Value += Val;
-		return;
+	while (Index <= 32001) {
+		C[Index] += Value;
+		Index += Lowbit(Index);
 	}
-	Change(Index, Val, Root -> l_son);
-	Change(Index, Val, Root -> r_son);
-	Root -> Value = Root -> l_son -> Value +\
-			Root -> r_son -> Value;
 }
-int Query(int l, int r, Node* Root = Tree)
+int Sum(int Index)
 {
-	if (r <= Root -> l || Root -> r <= l) return 0;
-	if (l <= Root -> l && Root -> r <= r) return Root -> Value;
-	return Query(l, r, Root -> l_son) +\
-		Query(l, r, Root -> r_son);
+	int Ans = 0;
+	while (Index > 0) {
+		Ans += C[Index];
+		Index -= Lowbit(Index);
+	}
+	return Ans;
 }
 
-int Ans[_];
 int main()
 {
 	File(code);
-	Tree -> l = 0;
-	Tree -> r = 32005;
-	Build();
-	int n = gi;
+	n = gi;
 	for (int i = 0; i < n; i++) {
-		int Index = gi,Temp = gi;
-		Ans[Query(0,Index + 1)]++;
-		Change(Index, 1);
+		int Index = gi + 1,Temp = gi;
+		Ans[Sum(Index)]++;
+		Add(Index, 1);
 	}
 	for (int i = 0; i < n; i++)
 		printf("%d\n", Ans[i]);
