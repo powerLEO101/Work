@@ -1,7 +1,20 @@
+"""""""""""""""""""""""""""""""""""""""
+" For 'Windows Subsystem for Linux'   "
+"""""""""""""""""""""""""""""""""""""""
+map <F3> : call CopyToWindows()<CR>
+map! <F3> <ESC> : call CopyToWindows()<CR>
+func! CopyToWindows()
+    exec "w"
+    exec "!cat % |/mnt/c/Windows/System32/clip.exe"
+endfunc
+
+
+
 """""""""""""""""""""""
 "      By Leo101      "
 """""""""""""""""""""""
 set nu
+color elflord
 set mouse=a
 autocmd BufNewFile *.cpp 0r ~/.cpp
 set showcmd
