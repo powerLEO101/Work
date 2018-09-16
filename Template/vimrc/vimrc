@@ -14,7 +14,7 @@ endfunc
 "      By Leo101      "
 """""""""""""""""""""""
 set nu
-color elflord
+color ron
 set mouse=a
 autocmd BufNewFile *.cpp 0r ~/.cpp
 set showcmd
