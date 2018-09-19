@@ -3,10 +3,12 @@
 #include <algorithm>
 #include <cstring>
 #define File(s) freopen(#s".in", "r", stdin); freopen(#s".out", "w", stdout)
-#define gi get_int()
+#define gi get_long_long()
 #define for_edge(i, x) for (int i = Head[x]; i != -1; i = Edges[i].Next)
 #define _ 5000000
-int get_int()
+#define INF 10000000000000000
+#define ll long long
+int get_long_long()
 {
 	int x = 0, y = 1; char ch = getchar();
 	while ((ch < '0' || ch > '9') && ch != '-') ch = getchar();
@@ -26,7 +28,7 @@ class Edge
 public:
 	int Next, To, Value;
 }Edges[_];
-bool operator< (const Edge1 a, const Edge1 b)
+bool operator< (const Edge1& a, const Edge1& b)
 {
 	return a.Value < b.Value;
 }
@@ -41,7 +43,8 @@ void Add_edges(int From, int To, int Value)
 	Head[From] = E_num++;
 }
 
-int Father[_], MST;
+int Father[_];
+ll MST;
 void init() {for (int i = 0; i < _; i++) Father[i] = i;}
 int Get_father(int u) {return Father[u] == u ? u : Father[u] = Get_father(Father[u]);}
 void Merge(int u, int v) {Father[Get_father(u)] = Get_father(v);}
@@ -61,7 +64,7 @@ void Kruskal()
 	}
 }
 
-int Up[_][21], Max[_][21];
+int Up[_][21], Max[_][21], Max1[_][21];
 
 void Dfs(int Now = 0)
 {
@@ -71,32 +74,41 @@ void Dfs(int Now = 0)
 		Up[To][0] = Now;
 		Deep[To] = Deep[Now] + 1;
 		Max[To][0] = Value;
+		Max1[To][0] = -0x3f3f3f3f;
 		Dfs(To);
 	}
 }
-int Move(int& u, int& v)
+int Move(int& u, int& v, int Value)
 {
 	if (Deep[u] == Deep[v]) return -0x3f3f3f3f;
 	if (Deep[u] < Deep[v]) std::swap(u, v);
 	int Ret = -0x3f3f3f3f;
 	for (int i = 20; i >= 0; i--)
 		if (Deep[Up[u][i]] >= Deep[v]) {
-			Ret = std::max(Ret, Max[u][i]);
+			if (Max[u][i] != Value) Ret = std::max(Ret, Max[u][i]);
+			else Ret = std::max(Ret, Max1[u][i]);
 			u = Up[u][i];
 		}
 	return Ret;
 }
-int Maxi(int u, int v)
+int Maxi(int u, int v, int Value)
 {
-	int Ret = Move(u, v);
-	printf("\n!%d\n", Ret);
+	int Ret = Move(u, v, Value);
 	for (int i = 20; i >= 0; i--)
 		if (Up[u][i] != Up[v][i]) {
+			if (Max[u][i] != Value) Ret = std::max(Ret, Max[u][i]);
+			else Ret = std::max(Ret, Max1[u][i]);
+			if (Max[v][i] != Value) Ret = std::max(Ret, Max[v][i]);
+			else Ret = std::max(Ret, Max1[v][i]);
 			u = Up[u][i];
 			v = Up[v][i];
-			Ret = std::max(Ret, std::max(Max[u][i], Max[v][i]));
 		}
-	if (u != v) Ret = std::max(Ret, std::max(Max[u][0], Max[v][0]));
+	if (u != v) {
+		if (Max[u][0] != Value) Ret = std::max(Ret, Max[u][0]);
+		else Ret = std::max(Ret, Max1[u][0]);
+		if (Max[v][0] != Value) Ret = std::max(Ret, Max[v][0]);
+		else Ret = std::max(Ret, Max1[v][0]);
+	}
 	return Ret;
 }
 
@@ -112,31 +124,19 @@ int main()
 	Kruskal();
 	Dfs();
 	for (int j = 1; j < 21; j++) 
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < n; i++) {
 			Up[i][j] = Up[Up[i][j - 1]][j - 1],
 			Max[i][j] = std::max(Max[i][j - 1], Max[Up[i][j - 1]][j - 1]);
-	for (int i = 0; i < n; i++) {
-		printf("%d : \n", i);
-		for_edge(j, i) {
-			int To = Edges[j].To, Value = Edges[j].Value;
-			printf("%d %d\n", To, Value);
+			Max1[i][j] = std::max(Max1[i][j - 1], Max1[Up[i][j - 1]][j - 1]);
+			if (Max[i][j - 1] < Max[Up[i][j - 1]][j - 1]) Max1[i][j] = std::max(Max1[i][j], Max[i][j - 1]);
+			else if (Max[i][j - 1] > Max[Up[i][j - 1]][j - 1]) Max1[i][j] = std::max(Max1[i][j], Max[Up[i][j - 1]][j - 1]);
 		}
-		printf("\n");
-	}
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < 21; j++)
-			printf("%d ", Up[i][j]);
-		printf("\n");
-	}
-	printf("\n\n");
-	int Ans = -0x3f3f3f3f;
+	long long Ans = INF;
 	for (int i = 0; i < m; i++) {
 		if (Edges1[i].Flag == true) continue;
 		int From = Edges1[i].From, To = Edges1[i].To, Value = Edges1[i].Value;
-		printf("%d %d %d ", From, To, Value);
-		Ans = std::max(Ans, MST - Maxi(From, To) + Value);
-		printf(" %d\n", Maxi(From, To));
+		Ans = std::min(Ans, MST - Maxi(From, To, Value) + Value);
 	}
-	printf("%d", Ans);
+	printf("%lld", Ans);
 	return 0;
 }
