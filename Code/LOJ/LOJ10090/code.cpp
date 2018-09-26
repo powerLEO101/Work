@@ -31,14 +31,16 @@ void Add_edge(int From,int To,int Value)
 
 int Dist[_],Count[_];
 bool Vis[_];
-void SPFA()
+void SPFA(int S)
 {
 	std::queue<int> Q;
+	memset(Vis, 0, sizeof(Vis));
+	memset(Count, 0, sizeof(Count));
 	memset(Dist,0x3f,sizeof(Dist));
-	Dist[1] = 0;
-	Vis[1] = true;
-	Q.push(1);
-	Count[1] = 1;
+	Dist[S] = 0;
+	Vis[S] = true;
+	Q.push(S);
+	Count[S] = 1;
 	while(!Q.empty())
 	{
 		int Now = Q.front();Q.pop();
@@ -54,15 +56,13 @@ void SPFA()
 				if(Count[To]>=n)
 				{
 					std::cout<<-1;
-					return;
+					exit(0);
 				}
 				Q.push(To);
 			}
 		}
 		Vis[Now] = false;
 	}
-	if(Dist[n]==INF)std::cout<<-2;
-	else std::cout<<Dist[n];
 }
 
 int main()
@@ -82,7 +82,10 @@ int main()
 		if(From<=To)std::swap(From,To);
 		Add_edge(From,To,Value);
 	}
-	for(int i = 2;i<=n;i++)Add_edge(i,i-1,0);
-	SPFA();
+	for(int i = 1;i<=n;i++)Add_edge(0,i,0);
+	SPFA(0);
+	SPFA(1);
+	if(Dist[n]==INF)std::cout<<-2;
+	else std::cout<<Dist[n];
 	return 0;
 }
