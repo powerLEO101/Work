@@ -37,11 +37,11 @@ void Add_edge(int From, int To)
 	Head[From] = E_num++;
 }
 
-int Val[_], Dp[_][3];
+long long Val[_], Dp[_][3];
 void Get_ans(int Now = 1, int Pre = -1)
 {
 	bool Flag = false;
-	int Min = -1;
+	long long Min = INF;
 	Dp[Now][0] = Val[Now];
 	for_edge(i, Now) {
 		int To = Edges[i].To;
@@ -49,18 +49,12 @@ void Get_ans(int Now = 1, int Pre = -1)
 		Get_ans(To, Now);
 		Dp[Now][0] += std::min(Dp[To][0], std::min(Dp[To][1], Dp[To][2]));
 		Dp[Now][2] += Dp[To][1];
-		if (Min == -1) Min = To;
-		else Min = Dp[Min][0] < Dp[To][0] ? Min : To;
-		if (Dp[To][0] < Dp[To][1]) {
+		Dp[Now][1] += std::min(Dp[To][1], Dp[To][0]);
+		if (Dp[To][0] < Dp[To][1])
 			Flag = true;
-			Dp[Now][1] += Dp[To][0];
-		} else {
-			Dp[Now][1] += Dp[To][1];
-		}
+		Min = std::min(Min, Dp[To][0] - Dp[To][1]);
 	}
-	if (Flag == false && Min != -1)
-		Dp[Now][1] += Dp[Min][0] - Dp[Min][1];
-	if (Min == -1) Dp[Now][1] = INF;
+	if (Flag == false) Dp[Now][1] += Min;
 }
 
 int main()
@@ -83,7 +77,7 @@ int main()
 
 	Get_ans();
 
-	printf("%d", std::min(Dp[1][0], Dp[1][1]));
+	printf("%lld", std::min(Dp[1][0], Dp[1][1]));
 
 	return 0;
 }
