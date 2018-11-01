@@ -10,6 +10,7 @@
 #define File(s) freopen(#s".in", "r", stdin); freopen(#s".out", "w", stdout)
 #define gi get_int()
 #define Mod 1000000007
+#define _ 30
 long long get_int()
 {
 	long long x = 0, y = 1; char ch = getchar();
@@ -32,17 +33,24 @@ public:
 } Dp[_][20][20];
 
 int Num[20];
+long long Pow[20];
 Node Dfs(int Now, int Sum, int Val, bool Flag)
 {
-	if (Flag == false && Dp[Now][Sum][Val] != -1) return Dp[Now][Sum][Val];
-	if (Now == -1) return (Node){1, 0, 0};
+	if (Flag == false && Dp[Now][Sum][Val].Cnt != -1) return Dp[Now][Sum][Val];
+	if (Now == -1) return (Node) {0, 0, Sum && Val};
 
 	int Lim = Flag == true ? Num[Now] : 9;
 	Node Ret;
 	for (int i = 0; i <= Lim; i++) {
-		if (i == 7 || ) continue;
-		Dfs(To);
+		if (i == 7) continue;
+		int Cur = (i * Pow[Now]) % Mod;
+		Node Tmp = Dfs(Now - 1, (Sum + i) % 7, (Val * 10 + i) % 7, Flag & (i == Lim));
+		Ret.Cnt = (Ret.Cnt + Tmp.Cnt) % Mod;
+		Ret.Sum = (Ret.Sum + ((Cur * Tmp.Cnt) + Tmp.Sum) % Mod) % Mod;
+		Ret.Sq = (((Ret.Sq + Tmp.Sq) % Mod + (Tmp.Cnt * ((Cur * Cur) % Mod)) % Mod) % Mod + (((2 * Cur) % Mod) * Tmp.Sum) % Mod) % Mod;
 	}
+	if (Flag == false) Dp[Now][Sum][Val] = Ret;
+	return Ret;
 }
 
 long long Get_ans(long long Lim)
@@ -61,6 +69,9 @@ long long Get_ans(long long Lim)
 int main()
 {
 	File(code);
+
+	Pow[0] = 1;
+	for (int i = 1; i < 20; i++) Pow[i] = (Pow[i - 1] * 10) % Mod;
 
 	int T = gi;
 	while (T--) {
