@@ -36,14 +36,14 @@ int Num[20];
 long long Pow[20];
 Node Dfs(int Now, int Sum, int Val, bool Flag)
 {
+	if (Now == -1) return (Node) {Sum && Val, 0, 0};
 	if (Flag == false && Dp[Now][Sum][Val].Cnt != -1) return Dp[Now][Sum][Val];
-	if (Now == -1) return (Node) {0, 0, Sum && Val};
 
 	int Lim = Flag == true ? Num[Now] : 9;
-	Node Ret;
+	Node Ret = (Node){0, 0, 0};
 	for (int i = 0; i <= Lim; i++) {
 		if (i == 7) continue;
-		int Cur = (i * Pow[Now]) % Mod;
+		long long Cur = (i * Pow[Now]) % Mod;
 		Node Tmp = Dfs(Now - 1, (Sum + i) % 7, (Val * 10 + i) % 7, Flag & (i == Lim));
 		Ret.Cnt = (Ret.Cnt + Tmp.Cnt) % Mod;
 		Ret.Sum = (Ret.Sum + ((Cur * Tmp.Cnt) + Tmp.Sum) % Mod) % Mod;
@@ -56,7 +56,7 @@ Node Dfs(int Now, int Sum, int Val, bool Flag)
 long long Get_ans(long long Lim)
 {
 	memset(Num, 0, sizeof(Num));
-	memset(Dp, 0, sizeof(Dp));
+	memset(Dp, -1, sizeof(Dp));
 	int Len = 0;
 	while (Lim != 0) {
 		Num[Len++] = Lim % 10;
@@ -76,7 +76,7 @@ int main()
 	int T = gi;
 	while (T--) {
 		long long l = gi, r = gi;
-		printf("%lld\n", ((Get_ans(r) + Mod) - Get_ans(l - 1)) % Mod);
+		printf("%lld\n", ((Get_ans(r) - Get_ans(l - 1)) % Mod + Mod) % Mod);
 	}
 
 	return 0;
