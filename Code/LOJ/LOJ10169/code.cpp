@@ -9,9 +9,9 @@
 #include <cstring>
 #define File(s) freopen(#s".in", "r", stdin); freopen(#s".out", "w", stdout)
 #define gi get_int()
-int get_int()
+long long get_int()
 {
-	int x = 0, y = 1; char ch = getchar();
+	long long x = 0, y = 1; char ch = getchar();
 	while ((ch < '0' || ch > '9') && ch != '-')
 		ch = getchar();
 	if (ch == '-') y = -1,ch = getchar();
@@ -22,42 +22,40 @@ int get_int()
 	return x * y;
 }
 
-int Answer[10];
-bool Vis[_];
-
-void Dfs(int Now, bool Flag)
+long long Dp[20][2][20][2];
+int Num[20];
+long long Dfs(int Now, int Sum, bool Flag, bool Zero, int Target)
 {
-	if (Flag == false && Vis[Now] == true) {
-		for (int i = 0; i < 10; i++) Answer[i] += Dp[Now][i];
-		return ;
-	}
-	if (Now == -1) {
-		
-	}
-
+	if (Now == -1) return Sum;
+	if (Dp[Now][Zero][Sum][Flag] != -1) return Dp[Now][Zero][Sum][Flag];
+	long long Ret = 0;
 	int Lim = Flag == false ? 9 : Num[Now];
-	for (int i = 0; i <= Lim; i++) {
-		
-	}
+	for (int i = 0; i <= Lim; i++)
+		Ret += Dfs(Now - 1, Sum + (i == Target && (Zero == false || (i != 0))), Flag & (i == Lim), Zero & (i == 0), Target);
+	Dp[Now][Zero][Sum][Flag] = Ret;
+	return Ret;
 }
 
-void Get_ans(int Lim) 
+long long Get_ans(long long Lim, int Digit)
 {
 	memset(Num, 0, sizeof(Num));
 	memset(Dp, -1, sizeof(Dp));
-	
 	int Len = 0;
 	while (Lim != 0) {
 		Num[Len++] = Lim % 10;
 		Lim /= 10;
 	}
+	
+	return Dfs(Len - 1, 0, true, true, Digit);
 }
 
 int main()
 {
 	File(code);
 
-	int l = gi, r = gi;
+	long long l = gi, r = gi;
+	for (int i = 0; i < 10; i++)
+		printf("%lld ", Get_ans(r, i) - Get_ans(l - 1, i));
 
 	return 0;
 }
