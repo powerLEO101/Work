@@ -9,6 +9,7 @@
 #include <cstring>
 #define File(s) freopen(#s".in", "r", stdin); freopen(#s".out", "w", stdout)
 #define gi get_int()
+const int MaxN = 10001, MaxVal = 101;
 int get_int()
 {
 	int x = 0, y = 1; char ch = getchar();
@@ -22,6 +23,8 @@ int get_int()
 	return x * y;
 }
 
+int Ha[MaxN][MaxVal], Dp[MaxN][MaxVal];
+
 int main()
 {
 	File(code);
@@ -32,18 +35,31 @@ int main()
 		int Fear = 0, Like = 0;
 		for (int i = 0; i < F_Num; i++) {
 			int x = gi;
-			x = ((x - e) % n + n) % n;
+			x = (x - e + n) % n;
 			Fear |= (1 << x);
 		}
 		for (int i = 0; i < L_Num; i++) {
 			int x = gi;
-			x = ((x - e) % n + n) % n;
+			x = (x - e + n) % n;
 			Like |= (1 << x);
 		}
-		for (int i = e; i < e + 5; i++) {
-			if (
-		}
+		for (int i = 0; i < (1 << 5); i++)
+			if ((~i & Fear) || (i & Like))
+				Ha[e][i]++;
 	}
+
+	int Ans = -1;
+	for (int T = 0; T < (1 << 5); T++) {
+		memset(Dp[0], -63, sizeof(Dp[0]));
+		Dp[0][T] = 0;
+		for (int i = 1; i <= n; i++) {
+			for (int j = 0; j < (1 << 5); j++) {
+				Dp[i][j] = std::max(Dp[i - 1][(j & 15) << 1], Dp[i - 1][(j & 15) << 1 | 1]) + Ha[i][j];
+			}
+		}
+		Ans = std::max(Ans, Dp[n][T]);
+	}
+	printf("%d", Ans);
 
 	return 0;
 }
