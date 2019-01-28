@@ -60,7 +60,6 @@ bool SPFA()
 			int To = Edges[i].To, Value = Edges[i].Value, Cost = Edges[i].Cost;
 			if (Value <= 0 || Dist[To] >= Dist[Now] + Cost) continue;
 			Dist[To] = Dist[Now] + Cost;
-			printf("%d", Dist[To]);
 			if (Vis[To] == false) {
 				Vis[To] = true;
 				Q.push(To);
@@ -113,28 +112,84 @@ int main()
 			Num[i][j] = gi, Number[i][j] = Sum++;
 	Sum *= 2;
 	S = Sum + 1, T = Sum + 2;
+	int Squ = (m + n + m - 1) * n / 2;
+
+	/*CASE 1*/
+
 	for (int i = 0; i < m; i++)
 		Add_edge(S, Number[0][i], 1, 0), Add_edge(Number[0][i], S, 0, 0);
 	for (int i = 0; i < n + m - 1; i++)
-		Add_edge(Num[n - 1][i] * 2, T, 1, 0), Add_edge(T, Number[n - 1][i] * 2, 0, 0);
+		Add_edge(Number[n - 1][i] + Squ, T, 1, 0), Add_edge(T, Number[n - 1][i] + Squ, 0, 0);
 	for (int i = 0; i < n - 1; i++) {
 		for (int j = 0 ; j < i + m; j++) {
-			Add_edge(Number[i][j], Number[i][j] * 2, 1, Num[i][j]);
-			Add_edge(Number[i][j] * 2, Number[i][j], 0, -Num[i][j]);
+			Add_edge(Number[i][j], Number[i][j] + Squ, 1, Num[i][j]);
+			Add_edge(Number[i][j] + Squ, Number[i][j], 0, -Num[i][j]);
 
-			Add_edge(Number[i][j] * 2, Number[i + 1][j], 1, 0);
-			Add_edge(Number[i + 1][j], Number[i][j], 0, 0);
+			Add_edge(Number[i][j] + Squ, Number[i + 1][j], 1, 0);
+			Add_edge(Number[i + 1][j], Number[i][j] + Squ, 0, 0);
 
-			Add_edge(Number[i][j] * 2, Number[i + 1][j + 1], 1, 0);
-			Add_edge(Number[i + 1][j + 1], Number[i][j] * 2, 0, 0);
+			Add_edge(Number[i][j] + Squ, Number[i + 1][j + 1], 1, 0);
+			Add_edge(Number[i + 1][j + 1], Number[i][j] + Squ, 0, 0);
 		}
 	}
 	for (int i = 0; i < n + m - 1; i++) {
-		Add_edge(Number[n - 1][i], Number[n - 1][i] * 2, 1, Num[n - 1][i]);
-		Add_edge(Number[n - 1][i] * 2, Number[n - 1][i], 0, -Num[n - 1][i]);
+		Add_edge(Number[n - 1][i], Number[n - 1][i] + Squ, 1, Num[n - 1][i]);
+		Add_edge(Number[n - 1][i] + Squ, Number[n - 1][i], 0, -Num[n - 1][i]);
 	}
 
 	printf("%d\n", Dinic());
+
+	/*CASE 2*/
+	
+	memset(Head, -1, sizeof(Head));
+	memset(Edges, 0, sizeof(Edges));
+	E_num = 0;
+	
+	for (int i = 0; i < m; i++) {
+		Add_edge(S, Number[0][i], 1, 0);
+		Add_edge(Number[0][i], S, 0, 0);
+	}
+	for (int i = 0; i < n - 1; i++) {
+		for (int j = 0; j < m + i; j++) {
+			Add_edge(Number[i][j], Number[i + 1][j], 1, Num[i][j]);
+			Add_edge(Number[i + 1][j], Number[i][j], 0, -Num[i][j]);
+			
+			Add_edge(Number[i][j], Number[i + 1][j + 1], 1, Num[i][j]);
+			Add_edge(Number[i + 1][j + 1], Number[i][j], 0, -Num[i][j]);
+		}
+	}
+	for (int i = 0; i < n + m + 1; i++) {
+		Add_edge(Number[n - 1][i], T, INF, Num[n - 1][i]);
+		Add_edge(T, Number[n - 1][i], 0, -Num[n - 1][i]);
+	}
+
+	printf("%d\n", Dinic());
+
+	/*CASE 3*/
+
+	memset(Head, -1, sizeof(Head));
+	memset(Edges, 0, sizeof(Edges));
+	E_num = 0;
+	
+	for (int i = 0; i < m; i++) {
+		Add_edge(S, Number[0][i], 1, 0);
+		Add_edge(Number[0][i], S, 0, 0);
+	}
+	for (int i = 0; i < n - 1; i++) {
+		for (int j = 0; j < m + i; j++) {
+			Add_edge(Number[i][j], Number[i + 1][j], INF, Num[i][j]);
+			Add_edge(Number[i + 1][j], Number[i][j], 0, -Num[i][j]);
+			
+			Add_edge(Number[i][j], Number[i + 1][j + 1], INF, Num[i][j]);
+			Add_edge(Number[i + 1][j + 1], Number[i][j], 0, -Num[i][j]);
+		}
+	}
+	for (int i = 0; i < n + m + 1; i++) {
+		Add_edge(Number[n - 1][i], T, INF, Num[n - 1][i]);
+		Add_edge(T, Number[n - 1][i], 0, -Num[n - 1][i]);
+	}
+
+	printf("%d", Dinic());
 
 	return 0;
 }
