@@ -12,7 +12,7 @@
 #define gi get_int()
 #define for_edge(i, x) for (int i = Head[x]; i != -1; i = Edges[i].Next)
 #define INF 0x3f3f3f3f
-const int Max_N = 30, Max_E = 10001;
+const int Max_N = 60, Max_E = 100001;
 int get_int()
 {
 	int x = 0, y = 1; char ch = getchar();
