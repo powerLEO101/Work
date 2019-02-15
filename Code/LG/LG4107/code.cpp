@@ -24,53 +24,37 @@ int get_int()
 	return x * y;
 }
 
-class Edge
-{
-public:
-	int Next, To;
-}Edges[Max_N];
-int Head[Max_N], E_num;
-void Add_edge(int From, int To)
-{
-	Edges[E_num] = (Edge) {Head[From], To};
-	Head[From] = E_num++;
-}
+int l[Max_N], r[Max_N], Son[Max_N], Cost[Max_N];
+int Ans, Cnt, n, m;
 
-int Sum[Max_N], Cost[Max_N], Tmp[Max_N];
-int Ans, n, m;
+bool Cmp(const int& a, const int& b)
+{ return Cost[a] < Cost[b]; }
 void Dfs(int Now = 0)
 {
-	int Num = 0;
-	for_edge(i, Now) {
-		int To = Edges[i].To;
-		Dfs(To);
-		Sum[Now] += Sum[To];
-		Tmp[Num++] = Cost[To];
-	}
-	
-	std::sort(Tmp, Tmp + Num);
-	int Count = m - Sum[Now];
-
-	for (int i = 0; i < Num; i++) {
-		if (Count - Tmp[i] < 0) break;
-		Count -= Tmp[i];
-		Ans++;
+	for (int i = l[Now]; i < r[Now]; i++) {
+		Dfs(Son[i]); Cost[Now]++;
 	}
 
-	Sum[Now]++;
+	std :: sort(Son + l[Now], Son + r[Now], Cmp);
+
+	for (int i = l[Now]; i < r[Now]; i++) {
+		int To = Son[i];
+		if (Cost[Now] + Cost[To] - 1 > m) break;
+		Cost[Now] += Cost[To] - 1; Ans++;
+	}
 }
 
 int main()
 {
 	File(code);
 
-	memset(Head, -1, sizeof(Head));
-
 	n = gi, m = gi;
 	for (int i = 0; i < n; i++) Cost[i] = gi;
 	for (int i = 0; i < n; i++) {
 		int Number = gi;
-		for (int j = 0; j < Number; j++) Add_edge(i, gi);
+		l[i] = Cnt;
+		for (int j = 0; j < Number; j++) Son[Cnt++] = gi;
+		r[i] = Cnt;
 	}
 
 	Dfs();
