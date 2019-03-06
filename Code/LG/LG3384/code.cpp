@@ -40,17 +40,17 @@ Node() {
 void Push_down(Node* Root, int l, int r)
 {
 	int Mid = (l + r) / 2;
-	Root -> l_son -> Val += Root -> Tag * (Mid - l);
-	Root -> r_son -> Val += Root -> Tag * (r - Mid);
-	Root -> l_son -> Tag += Root -> Tag;
-	Root -> r_son -> Tag += Root -> Tag;
+	Root -> l_son -> Val = (Root -> l_son -> Val + Root -> Tag * (Mid - l)) % Mod;
+	Root -> r_son -> Val = (Root -> r_son -> Val + Root -> Tag * (r - Mid)) % Mod;
+	Root -> l_son -> Tag = (Root -> l_son -> Tag + Root -> Tag) % Mod;
+	Root -> r_son -> Tag = (Root -> r_son -> Tag + Root -> Tag) % Mod;
 	Root -> Tag = 0;
 }
 void Build(int l, int r, Node* &Root = Seg_Tree)
 {
 	if (Root == NULL) Root = new Node;
 	if (l == r - 1) {
-		Root -> Val = Weight[l];
+		Root -> Val = Weight[l] % Mod;
 		return ;
 	}
 	int Mid = (l + r) / 2;
@@ -65,8 +65,8 @@ void Modify(int l, int r, int Ml, int Mr, int Val, Node* Root = Seg_Tree) // [)
 {
 	if (r <= Ml || Mr <= l) return ;
 	if (Ml <= l && r <= Mr) {
-		Root -> Val += Val * (r - l);
-		Root -> Tag += Val;
+		Root -> Val = (Root -> Val + Val * (r - l)) % Mod;
+		Root -> Tag = (Root -> Tag + Val) % Mod;
 		return ;
 	}
 
@@ -74,8 +74,8 @@ void Modify(int l, int r, int Ml, int Mr, int Val, Node* Root = Seg_Tree) // [)
 	Push_down(Root, l, r);
 	Modify(l, Mid, Ml, Mr, Val, Root -> l_son);
 	Modify(Mid, r, Ml, Mr, Val, Root -> r_son);
-	Root -> Val = Root -> l_son -> Val +\
-		      Root -> r_son -> Val;
+	Root -> Val = (Root -> l_son -> Val +\
+		      Root -> r_son -> Val) % Mod;
 }
 int Query(int l, int r, int Ml, int Mr, Node* Root = Seg_Tree)
 {
@@ -84,8 +84,8 @@ int Query(int l, int r, int Ml, int Mr, Node* Root = Seg_Tree)
 
 	int Mid = (l + r) / 2;
 	Push_down(Root, l, r);
-	return Query(l, Mid, Ml, Mr, Root -> l_son) +\
-	       Query(Mid, r, Ml, Mr, Root -> r_son);
+	return (Query(l, Mid, Ml, Mr, Root -> l_son) +\
+	       Query(Mid, r, Ml, Mr, Root -> r_son)) % Mod;
 }
 
 class Edge
@@ -110,7 +110,7 @@ void Dfs1(int Now, int Pre = -1)
 		Depth[To] = Depth[Now] + 1;
 		Dfs1(To, Now);
 		Size[Now] += Size[To];
-		if (Size[To] > Son[Now] == -1 ? 0 : Size[Son[Now]]) Son[Now] = To;
+		if (Size[To] > (Son[Now] == -1 ? 0 : Size[Son[Now]])) Son[Now] = To;
 	}
 }
 int Tot;
@@ -170,6 +170,7 @@ int main()
 		Add_edge(To, From);
 	}
 
+	Father[R] = R;
 	Dfs1(R); Dfs2(R, R);
 	Build(0, n);
 
@@ -182,10 +183,10 @@ int main()
 			int l = gi - 1, r = gi - 1;
 			Range_Query(l, r);
 		} else if (Opt == 3) {
-			int N = gi, v = gi;
+			int N = gi - 1, v = gi;
 			Range_Add(N, v);
 		} else {
-			int N = gi;
+			int N = gi - 1;
 			Range_Query(N);
 		}
 	}
