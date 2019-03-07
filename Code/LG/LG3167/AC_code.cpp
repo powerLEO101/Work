@@ -30,6 +30,8 @@ int main() {
 		hasha[i] = hasha[i - 1] * BASE + a[i];
 		if(a[i] == '?' || a[i] == '*') pos[++tot] = i; 
 	}
+	for (int i = 1; i <= n; i++) std :: cout << hasha[i] << ' ';
+	std :: cout << std :: endl;
 	while(t--) {
 		memset(dp, 0, sizeof(dp));
 		scanf("%s", b + 1);
