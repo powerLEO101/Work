@@ -11,7 +11,7 @@
 #include <queue>
 #define File(s) freopen(#s".in", "r", stdin); freopen(#s".out", "w", stdout)
 #define gi get_int()
-const int Max_N = 10001;
+const int Max_N = 1e5;
 int get_int()
 {
 	int x = 0, y = 1; char ch = getchar();
@@ -46,9 +46,13 @@ void Get_Shift()
 	while (!Q.empty()) {
 		int Now = Q.front(); Q.pop();
 		for (int i = 0; i <= 1; i++) {
-			if (Trie[Now][i] != 0) Shift[Trie[Now][i]] = Trie[Shift[Now]][i],
-					       Q.push(Trie[Now][i]);
-			else Trie[Now][i] = Trie[Shift[Now]][i];
+			if (Trie[Now][i] != 0) {
+				Shift[Trie[Now][i]] = Trie[Shift[Now]][i];
+				Val[Trie[Now][i]] |= Val[Shift[Trie[Now][i]]];
+				Q.push(Trie[Now][i]);
+			} else {
+				Trie[Now][i] = Trie[Shift[Now]][i];
+			}
 		}
 	}
 }
@@ -64,6 +68,7 @@ void Dfs(int Now = 0)
 		int To = Trie[Now][i];
 		Dfs(To);
 	}
+	Vis[Now] = false;
 }
 
 int main()
