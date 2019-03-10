@@ -9,8 +9,10 @@
 #include <cstring>
 #include <string>
 #include <queue>
+#include <vector>
 #define File(s) freopen(#s".in", "r", stdin); freopen(#s".out", "w", stdout)
 #define gi get_int()
+const int Max_N = 2e6;
 int get_int()
 {
 	int x = 0, y = 1; char ch = getchar();
@@ -24,8 +26,9 @@ int get_int()
 	return x * y;
 }
 
-int Trie[Max_N][26], Val[Max_N], Tot = 1;
-void Insert(std :: string Str)
+int Trie[Max_N][26], Val[Max_N], Rt[Max_N], Shift[Max_N], Tot = 1;
+std :: vector<int> Edges[Max_N];
+void Insert(std :: string Str, int Id)
 {
 	int Len = Str.size(), Root = 0;
 	for (int i = 0; i < Len; i++) {
@@ -34,21 +37,36 @@ void Insert(std :: string Str)
 		Root = Trie[Root][Now];
 		Val[Root]++;
 	}
+	Rt[Id] = Root;
 }
 void Get_Shift()
 {
 	std :: queue<int> Q;
 	for (int i = 0; i < 26; i++) 
-		if (Trie[0][i] != 0) Q.push(Trie[0][i]);
+		if (Trie[0][i] != 0) {
+			Q.push(Trie[0][i]);
+			Edges[0].push_back(Trie[0][i]);
+		}
 	while (!Q.empty()) {
 		int Now = Q.front(); Q.pop();
 		for (int i = 0; i < 26; i++) {
 			if (Trie[Now][i] != 0) {
 				Shift[Trie[Now][i]] = Trie[Shift[Now]][i];
+				Edges[Shift[Trie[Now][i]]].push_back(Trie[Now][i]);
 				Q.push(Trie[Now][i]);
+			} else {
+				Trie[Now][i] = Trie[Shift[Now]][i];
 			}
 		}
 	} 
+}
+void Dfs(int Now = 0)
+{
+	for (auto it = Edges[Now].begin(); it != Edges[Now].end(); it++) {
+		int To = *it;
+		Dfs(To);
+		Val[Now] += Val[To];
+	}
 }
 
 int main()
@@ -59,8 +77,14 @@ int main()
 	for (int i = 0; i < n; i++) {
 		std :: string Str;
 		std :: cin >> Str;
-		Insert(Str);
+		Insert(Str, i);
 	}
+
+	Get_Shift();
+	Dfs();
+
+	for (int i = 0; i < n; i++)
+		printf("%d\n", Val[Rt[i]]);
 
 	return 0;
 }
