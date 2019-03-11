@@ -1,4 +1,4 @@
-/**************************
+/*************************
   * Writer : Leo101
   * Problem : LG P4178 Tree
   * Tags : 点分治
@@ -35,7 +35,7 @@ void Add_edge(int From, int To, int Value)
 	Head[From] = E_num++;
 }
 
-int Ans, Next_Rt, Size, Cnt, Global_Max;
+int Ans, Next_Rt, Size, Cnt, Global_Min;
 int Sz[Max_N], Dis[Max_N];
 bool Vis[Max_N];
 void Get_Focus(int Now, int Pre = -1)
