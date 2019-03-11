@@ -49,6 +49,9 @@ ll calc(int x,int v){
 	ll sum=0;
 	l=1;
 	sort(q+1,q+r+1);
+	for (int i = 1; i <= r; i++)
+		printf("%lld ", q[i]);
+	printf("\n");
 	while(l<r){
 		if(q[l]+q[r]<=k)sum+=r-l,l++;
 		else r--;

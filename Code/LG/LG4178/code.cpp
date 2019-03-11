@@ -9,7 +9,7 @@
 #include <cstring>
 #define File(s) freopen(#s".in", "r", stdin); freopen(#s".out", "w", stdout)
 #define gi get_int()
-const int Max_N = 4e4;
+const int Max_N = 4e5;
 int get_int()
 {
 	int x = 0, y = 1; char ch = getchar();
@@ -50,56 +50,31 @@ void Get_Focus(int Now, int Pre = -1)
 	}
 
 	Max_Val = std :: max(Max_Val, Size - Sz[Now]);
-	if (Max_Val > Global_Max) {
-		Global_Max = Max_Val;
+	if (Max_Val < Global_Min) {
+		Global_Min = Max_Val;
 		Next_Rt = Now;
 	}
 }
 void Dfs(int Now, int Extra, int Pre = -1, int Dist = 0)
 {
+	Dis[Cnt++] = Dist + Extra;
 	for (int i = Head[Now]; i != -1; i = Edges[i].Next) {
 		int To = Edges[i].To, Value = Edges[i].Value;
 		if (To == Pre || Vis[To] == true) continue;
-		Dis[Cnt++] = Dist + Value + Extra;
 		Dfs(To, Extra, Now, Dist + Value);
 	}
-}
-int Get_l(int Val)
-{
-	int l = 0, r = Cnt - 1, Ret = Cnt;
-	while (l <= r) {
-		int Mid = (l + r) / 2;
-		if (Dis[Mid] + Val <= k) {
-			r = Mid - 1;
-			Ret = Mid;
-		} else {
-			l = Mid + 1;
-		}
-	}
-	return Ret;
-}
-int Get_r(int Val)
-{
-	int l = 0, r = Cnt - 1, Ret = Cnt - 1;
-	while (l <= r) {
-		int Mid = (l + r) / 2;
-		if (Dis[Mid] + Val <= k) {
-			l = Mid + 1;
-			Ret = Mid;
-		} else {
-			r = Mid - 1;
-		}
-	}
-	return Ret;
 }
 int Get_ans(int Now, int Extra)
 {
 	Cnt = 0; Dfs(Now, Extra);
 	std :: sort(Dis, Dis + Cnt);
 
-	int Ret = 0;
-	for (int i = 0; i < Cnt; i++)
-		Ret += Get_r(Dis[i]) - Get_l(Dis[i]) + 1;
+	int Ret = 0, l = 0, r = Cnt - 1;
+	while (l < r) {
+		if (Dis[l] + Dis[r] <= k) Ret += r - l, l++;
+		else r--;
+	}
+
 	return Ret;
 }
 void Divide(int Now)
@@ -110,7 +85,8 @@ void Divide(int Now)
 	for (int i = Head[Now]; i != -1; i = Edges[i].Next) {
 		int To = Edges[i].To, Value = Edges[i].Value;
 		if (Vis[To] == true) continue;
-		Next_Rt = -1, Size = Sz[To] > Sz[Now] ? Size_Backup - Sz[To] : Sz[To];
+		Next_Rt = -1, Size = Sz[To] > Sz[Now] ? Size_Backup - Sz[Now] : Sz[To];
+		Global_Min = 0x3f3f3f3f;
 		Get_Focus(To);
 		Ans -= Get_ans(To, Value);
 		Divide(Next_Rt);
@@ -130,6 +106,8 @@ int main()
 	}
 	k = gi;
 
+	Next_Rt = -1, Global_Min = 0x3f3f3f3f;
+	Size = n;
 	Get_Focus(1);
 	Divide(Next_Rt);
 	
