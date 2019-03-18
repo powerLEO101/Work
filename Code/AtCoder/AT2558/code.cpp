@@ -9,7 +9,11 @@
 #include <cstring>
 #define gi get_int()
 #define _FILE(s) freopen(#s".in", "r", stdin); freopen(#s".out", "w", stdout)
-#define INF 0x3f3f3f3f
+#define DEBUG printf("Passing [%s] in LINE %d\n",__FUNCTION__,__LINE__)
+#define INF 0x3f3f3f3f3f3f3f3f
+typedef long long LL;
+#define int LL
+const int MAXN = 3e5;
 int get_int()
 {
 	int x = 0, y = 1; char ch = getchar();
@@ -20,6 +24,7 @@ int get_int()
 }
 
 int n, Q, A, B;
+int num[MAXN];
 
 class Node
 {
@@ -36,8 +41,9 @@ void build(int l, int r, Node* &root)
 {
 	if (root == NULL) root = new Node;
 	if (l == r - 1) return ;
-	build(root -> lSon); 
-	build(root -> rSon);
+	int mid = (l + r) / 2;
+	build(l, mid, root -> lSon);
+	build(mid, r, root -> rSon);
 }
 void pushdown(Node* root)
 {
@@ -75,27 +81,44 @@ void modifyNode(int index, int val, int l, int r, Node* root)
 	modifyNode(index, val, mid, r, root -> rSon);
 	root -> val = std :: min(root -> lSon -> val, root -> rSon -> val);
 }
-int query(int ql, int qr, int l, int r, Node* root)
+int query(int ml, int mr, int l, int r, Node* root)
 {
 	if (mr <= l || r <= ml) return INF;
 	if (ml <= l && r <= mr) return root -> val;
 	pushdown(root);
 	int mid = (l + r) / 2;
-	return std :: min(query(ql, qr, l, mid, root -> lSon),\
-			  query(ql, qr, mid, r, root -> rSon);
+	return std :: min(query(ml, mr, l, mid, root -> lSon),\
+			  query(ml, mr, mid, r, root -> rSon));
 }
 
-int main()
+int ABS(int u)
+{ return u < 0 ? -u : u; }
+signed main()
 {
 	_FILE(code);
 
 	n = gi, Q = gi, A = gi, B = gi;
 	for (int i = 0; i < Q; i++) num[i] = gi;
+	build(0, n + 2, root[0]);
+	build(0, n + 2, root[1]);
+	modifyNode(A, ABS(B - num[0]) + A, 0, n + 2, root[0]);
+	modifyNode(B, ABS(B - num[0]) + B, 0, n + 2, root[0]);
+	modifyNode(A, ABS(A - num[0]) - A, 0, n + 2, root[1]);
+	modifyNode(B, ABS(A - num[0]) - B, 0, n + 2, root[1]);
+	for (int i = 1; i < Q; i++) {
+		int tmp = std :: min(query(num[i], n + 1, 0, n + 2, root[0]) - num[i],\
+				     query(1, num[i], 0, n + 2, root[1]) + num[i]);
+		modifyInterval(1, n + 1, ABS(num[i] - num[i - 1]), 0, n + 2, root[0]);
+		modifyInterval(1, n + 1, ABS(num[i] - num[i - 1]), 0, n + 2, root[1]);
+		modifyNode(num[i - 1], tmp + num[i - 1], 0, n + 2, root[0]);
+		modifyNode(num[i - 1], tmp - num[i - 1], 0, n + 2, root[1]);
+	}
 
-	build(0, n + 1, Root[0]);
-	build(0, n + 1, Root[1]);
-	modifyNode();
-	for (int i = 1; i < Q;
+	int ans = INF;
+	for (int i = 1; i <= n; i++)
+		ans = std :: min(ans, query(i, i + 1, 0, n + 2, root[0]) - i);
+
+	printf("%lld", ans);
 
 	return 0;
 }
