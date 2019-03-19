@@ -99,10 +99,10 @@ int main() {
 	for (int i = 1; i <= m; ++i) w[i] = read();
 	build(root[0], 1, n);
 	build(root[1], 1, n);
-	modify(root[0], 1, n, A, std::abs(w[1] - B) - A);
 	modify(root[1], 1, n, A, std::abs(w[1] - B) + A);
-	modify(root[0], 1, n, B, std::abs(w[1] - A) - B);
 	modify(root[1], 1, n, B, std::abs(w[1] - A) + B);
+	modify(root[0], 1, n, B, std::abs(w[1] - A) - B);
+	modify(root[0], 1, n, A, std::abs(w[1] - B) - A);
 	for (int i = 2; i <= m; ++i) {
 		int foo = std::abs(w[i] - w[i - 1]);
 		LL res = query(root[0], 1, n, 1, w[i]) + w[i];

@@ -102,8 +102,8 @@ signed main()
 	build(0, n + 2, root[0]);
 	build(0, n + 2, root[1]);
 	modifyNode(A, ABS(B - num[0]) + A, 0, n + 2, root[0]);
-	modifyNode(B, ABS(B - num[0]) + B, 0, n + 2, root[0]);
-	modifyNode(A, ABS(A - num[0]) - A, 0, n + 2, root[1]);
+	modifyNode(B, ABS(A - num[0]) + B, 0, n + 2, root[0]);
+	modifyNode(A, ABS(B - num[0]) - A, 0, n + 2, root[1]);
 	modifyNode(B, ABS(A - num[0]) - B, 0, n + 2, root[1]);
 	for (int i = 1; i < Q; i++) {
 		int tmp = std :: min(query(num[i], n + 1, 0, n + 2, root[0]) - num[i],\
@@ -116,7 +116,7 @@ signed main()
 
 	int ans = INF;
 	for (int i = 1; i <= n; i++)
-		ans = std :: min(ans, query(i, i + 1, 0, n + 2, root[0]) - i);
+		ans = std :: min(ans, query(i, i + 1, 0, n + 2, root[1]) + i);
 
 	printf("%lld", ans);
 
