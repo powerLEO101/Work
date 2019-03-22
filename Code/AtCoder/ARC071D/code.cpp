@@ -1,6 +1,6 @@
 /**************************
   * Writer : Leo101
-  * Problem : AT2396 Infinite Sequence
+  * Problem : ARC071D Infinite Sequence
   * Tags : Dp，递推
 **************************/
 #include <iostream>

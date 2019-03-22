@@ -1,6 +1,6 @@
 /**************************
   * Writer : Leo101
-  * Problem : AT2557 Ball Coloring
+  * Problem : ARC073C Ball Coloring
   * Tags : 贪心
 **************************/
 #include <iostream>

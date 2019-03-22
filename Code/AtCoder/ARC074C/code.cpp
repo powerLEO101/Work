@@ -1,6 +1,6 @@
 /**************************
   * Writer : Leo101
-  * Problem : AT2567 RGB Sequence
+  * Problem : ARC074C RGB Sequence
   * Tags : Dp
 **************************/
 #include <iostream>
