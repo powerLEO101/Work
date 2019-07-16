@@ -24,7 +24,7 @@ public:
 bool operator< (const data& a, const data& b)
 { return a.b > b.b; }
 
-int sum[1000000], dp[300][120000];
+int sum[1000000], dp[300][50000];
 
 int main()
 {
