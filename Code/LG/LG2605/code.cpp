@@ -8,9 +8,9 @@
 #include <cstring>
 #include <algorithm>
 #define gi get_int()
-#define _FILE(s) freopen(#s".in", "r", stdin); freopen(#s".out", "w", stdout)
+#define _FILE(s) freopen(#s".in", "r", stdin);freopen(#s".out", "w", stdout)
 #define INF 0x3f3f3f3f
-#define INF 0x3f3f3f3f
+#define int long long
 const int MAXN = 1e5;
 int get_int()
 {
@@ -34,11 +34,11 @@ int binarySearchL(int index, int value)
   int l = 0, r = index + 1, ans = index;
   while (l < r - 1) {
     int mid = (l + r) / 2;
-    if (d[index] - d[mid] <= value) {
+    if (d[index] - d[mid] >= value) {
       ans = mid;
-      r = mid;
-    } else {
       l = mid + 1;
+    } else {
+      r = mid - 1;
     }
   }
   return ans;
@@ -48,11 +48,11 @@ int binarySearchR(int index, int value)
   int l = index, r = n, ans = index;
   while (l < r - 1) {
     int mid = (l + r) / 2;
-    if (d[mid] - d[index] <= value) {
+    if (d[mid] - d[index] >= value) {
       ans = mid;
-      l = mid + 1;
-    } else {
       r = mid;
+    } else {
+      l = mid;
     }
   }
   return ans;
@@ -66,7 +66,7 @@ public:
 int head[MAXN], edgesNum;
 void addEdge(int from, int to)
 {
-  edges[edgesNum++] = (Edge) {head[from], to};
+  edges[edgesNum] = (Edge) {head[from], to};
   head[from] = edgesNum++;
 }
 
@@ -77,6 +77,7 @@ class Node
 } nodes[MAXN << 1];
 void buildTree(int l = 0, int r = n, int root = 1)
 {
+  nodes[root].tag = 0;
   if (l == r - 1) {
     nodes[root].value = dp[l];
     nodes[root].tag = 0;
@@ -106,9 +107,10 @@ void modifyTree(int qL, int qR, int value, int l = 0, int r = n, int root = 1)
     nodes[root].tag += value;
     return ;
   }
+  pushDown(root);
   int mid = (l + r) / 2;
-  modifyTree(qL, qR, value, l, mid);
-  modifyTree(qL, qR, value, mid, r);
+  modifyTree(qL, qR, value, l, mid, root << 1);
+  modifyTree(qL, qR, value, mid, r, root << 1 | 1);
   nodes[root].value = std :: min(nodes[root << 1].value,\
                                  nodes[root << 1 | 1].value);
 }
@@ -123,13 +125,13 @@ int queryTree(int qL, int qR, int l = 0, int r = n, int root = 1)
                     queryTree(qL, qR, mid, r, root << 1 | 1));
 }
 
-int main()
+signed main()
 {
   _FILE(code);
 
   memset(head, -1, sizeof(head));
 
-  n = gi, K = gi;
+  n = gi, K = gi + 1;
   for (int i = 1; i < n; ++i) d[i] = gi;
   for (int i = 0; i < n; ++i) c[i] = gi;
   for (int i = 0; i < n; ++i) s[i] = gi;
@@ -138,8 +140,11 @@ int main()
   n++;
 
   for (int i = 0; i < n; ++i) {
-    st[i] = binarySearchL(i, s[i]);
-    ed[i] = binarySearchR(i, s[i]);
+    // st[i] = binarySearchL(i, s[i]);
+    // ed[i] = binarySearchR(i, s[i]);
+    st[i] = std :: lower_bound(d, d + n, d[i] - s[i]) - d;
+    ed[i] = std :: lower_bound(d, d + n, d[i] + s[i]) - d;
+    if (d[ed[i]] > d[i] + s[i]) ed[i]--;
     addEdge(ed[i], i);
   }
 
@@ -157,10 +162,10 @@ int main()
     buildTree();
     for (int i = 0; i < j - 1; i++) dp[i] = INF;
     for (int i = j - 1; i < n; ++i) {
-      dp[i] = queryTree(0, i) + c[i];
+      dp[i] = queryTree(j - 2, i) + c[i];
       for (int k = head[i]; k != -1; k = edges[k].next) {
         int to = edges[k].to;
-        modifyTree(w[to], 0, st[to]);
+        modifyTree(0, st[to], w[to]);
       }
     }
     ans = std :: min(ans, dp[n - 1]);
