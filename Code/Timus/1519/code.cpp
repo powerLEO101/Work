@@ -27,11 +27,11 @@ int get_int()
 int map[50][50];
 std::map<int, int> dp[2];
 
-int getStatus(int s, int index)
+int getStatus(int s, int index) // 获得在s这个四进制数里面，第index位的状态，可以是0 : 没有插头，1 : 有左括号插头, 2 : 有右括号插头
 {
   return (s >> (index << 1)) & 3;
 }
-int getStatusChanged(int s, int index, int value)
+int getStatusChanged(int s, int index, int value) // 返回修改s的第index位成value之后的s
 {
   index <<= 1;
   s &= ~(3 << index);
@@ -44,17 +44,18 @@ signed main()
 	_FILE(code);
 
   int n = gi, m = gi, endX, endY;
+	// 输入：不能走=0, 空地=1
   for (int i = 0; i < n; i++) 
     for (int j = 0; j < m; j++) {
       char ch;
-      std :: cin >> ch;
+      std::cin >> ch;
       if (ch == '.') {
         map[i][j] = 1;
         endX = i; endY = j;
       } else 
         map[i][j] = 0;
     }
-
+	// map:地图
   int index = 0;
   dp[index][0] = 1;
   for (int i = 0; i < n; i++) {
@@ -63,9 +64,9 @@ signed main()
       dp[now].clear();
       for (auto it : dp[index]) {
         int currentStatus = it.first, currentAnswer = it.second;
-        if (j == 0) 
-          currentStatus <<= 2;
-        int left = getStatus(currentStatus, j), up = getStatus(currentStatus, j + 1);
+        if (j == 0) // 
+          currentStatus <<= 2; //
+        int left = getStatus(currentStatus, j), up = getStatus(currentStatus, j + 1); // left : 左插头, right : 右插头
         if (map[i][j] == 0) {
           int tmp = getStatusChanged(getStatusChanged(currentStatus, j, 0), j + 1, 0);
           dp[now][tmp] += currentAnswer;
