@@ -69,7 +69,7 @@ int main() {
 		for(int i = 1; i <= cnt; i++) {
 			if (e[i]) ans++;
 		}
-		std::cout << 0 << ans;
+		std::cout << 0 << std::endl << ans;
 	}
 	return 0;
 }
